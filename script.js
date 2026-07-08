@@ -69,3 +69,28 @@ card2.addEventListener("mouseleave", () =>{
         arrow1.style.opacity = "0";
     }, 300);
 });
+
+document.addEventListener("keydown", (e) => {
+    if (e.key === "t") {
+        document.getElementById("templateswindow").classList.add("active");
+        document.getElementById("backdrop").classList.add("active");
+    }
+    if (e.key === "T") {
+        document.getElementById("templateswindow").classList.add("active");
+        document.getElementById("backdrop").classList.add("active");
+    }
+    if (e.key === "c") {
+        document.getElementById("customwindow").classList.add("active");
+        document.getElementById("backdrop").classList.add("active");
+    }
+    if (e.key === "C") {
+        document.getElementById("customwindow").classList.add("active");
+        document.getElementById("backdrop").classList.add("active");
+    }
+    if (e.key === "Escape") {
+        document.getElementById("templateswindow").classList.remove("active");
+        document.getElementById("customwindow").classList.remove("active");
+        document.getElementById("backdrop").classList.remove("active");
+    }
+});
+

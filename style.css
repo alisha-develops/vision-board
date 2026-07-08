@@ -13,6 +13,17 @@
 body {
     background-color: #f3d3ae; background-image: url("https://transparenttextures.com/patterns/45-degree-fabric-dark.png");
     color: #222;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+}
+main {
+    flex: 1;
 }
 
 header {
@@ -69,6 +80,7 @@ header h1 {
     align-items: center;
     padding: 60px 20px;
     flex-wrap: wrap;
+    cursor: pointer;
 }
 
 .options a {
@@ -125,4 +137,32 @@ header h1 {
     border: none;
     font-size: 1.5rem;
     cursor: pointer;
+}
+
+footer {
+    margin-top: auto;
+    width: 100%;
+    padding: 6px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #664b2c;
+    color: rgb(255, 255, 255);
+    font-size: 1.1rem;
+    font-family: 'Yuyu';
+}
+
+.footer1 p {
+    margin: 0;
+}
+
+.icons {
+    min-width: 22px; 
+    height: 22px; 
+    padding: 0 6px; 
+    margin: 0 3px;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.08);
+    font-weight: 600;font-size: 0.9em;
 }
