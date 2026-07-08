@@ -94,3 +94,54 @@ document.addEventListener("keydown", (e) => {
     }
 });
 
+document.getElementById("upload").addEventListener("click",()=> {
+    document.getElementById("photoupload").click();
+});
+
+document.getElementById("photoupload").addEventListener("change", (e) =>{
+    const file = e.target.files[0];
+    if (!file) return;
+    
+    const reader = new FileReader();
+    reader.onload = (event) => {
+        const img = document.createElement("img");
+        img.src = event.target.result;
+        img.style.cssText = `
+            width:150px;
+            height: 150px;
+            object-fit:cover;
+            border: 5px dashed #664b2c;
+            border-radius: 8px;
+            position: absolute;
+            top: 50px;
+            left: 50px;
+            cursor: move;
+        `;
+        img.classList.add("uploadedphoto");
+        document.getElementById("customwindow").appendChild(img);
+        makeDraggable(img);
+    };
+    reader.readAsDataURL(file);
+});
+
+function makeDraggable(el){
+    let startX, startY, startLeft, startTop;
+
+    el.addEventListener("mousedown", (e) => {
+        startX = e.clientX;
+        startY = e.clientY;
+        startLeft = el.offsetLeft;
+        startTop = el.offsetTop;
+
+        document.addEventListener("mousemove", onMove);
+        document.addEventListener("mouseup", onUp);
+    });
+    function onMove(e){
+        el.style.left = (startLeft +e.clientX - startX)+ "px";
+        el.style.top = (startTop +e.clientY - startY)+ "px";
+    }
+    function onUp() {
+        document.removeEventListener("mousemove", onMove);
+        document.removeEventListener("mouseup", onUp);
+    }
+}
