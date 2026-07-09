@@ -107,15 +107,11 @@ document.getElementById("photoupload").addEventListener("change", (e) =>{
         const img = document.createElement("img");
         img.src = event.target.result;
         img.style.cssText = `
-            width:150px;
-            height: 150px;
-            object-fit:cover;
-            border: 5px dashed #664b2c;
-            border-radius: 8px;
             position: absolute;
             top: 50px;
             left: 50px;
             cursor: move;
+            max-width: 300px;
         `;
         img.classList.add("uploadedphoto");
         document.getElementById("customwindow").appendChild(img);
@@ -125,23 +121,37 @@ document.getElementById("photoupload").addEventListener("change", (e) =>{
 });
 
 function makeDraggable(el){
-    let startX, startY, startLeft, startTop;
+    el.style.userSelect ="none";
 
-    el.addEventListener("mousedown", (e) => {
-        startX = e.clientX;
-        startY = e.clientY;
-        startLeft = el.offsetLeft;
-        startTop = el.offsetTop;
+    const paper = document.createElement("div");
+        paper.style.cssText=`
+        position: absolute;
+        top:50px;
+        left:50px;
+        width:fit-content;
+        cursor: move;
+    `;
 
-        document.addEventListener("mousemove", onMove);
-        document.addEventListener("mouseup", onUp);
-    });
-    function onMove(e){
-        el.style.left = (startLeft +e.clientX - startX)+ "px";
-        el.style.top = (startTop +e.clientY - startY)+ "px";
-    }
-    function onUp() {
-        document.removeEventListener("mousemove", onMove);
-        document.removeEventListener("mouseup", onUp);
-    }
+    const grid= document.createElement("div");
+    grid.style.cssText =`
+        position: absolute;
+        top: 0;
+        left:0;
+        width: 100%;
+        height:100%;
+        pointer-events:none;
+        background-image:linear-gradient(rgba(102,75,44,0.3) 1px, transparent 1px),linear-gradient(90deg, rgba(102,75,44,0.3) 1px, transparent 1px);
+        background-size: 20px 20px;
+        z-index: 5;
+    `;
+
+    el.style.cssText = `
+        display: block;
+        max-width: 300px;
+        cursor: move;
+    `;
+
+    el.parentNode.insertBefore(paper, el);
+    paper.appendChild(el);
+    paper.appendChild(grid);
 }
