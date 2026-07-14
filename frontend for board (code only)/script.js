@@ -1,3 +1,14 @@
+async function playRandomMusic(){
+    const response = await fetch("http://127.0.0.1:8000/api/random");
+    const track = await response.json();
+
+    const audio = document.getElementById("player");
+    audio.src = track.url;
+    audio.play();
+}
+
+playRandomMusic();
+
 document.getElementById("card1").addEventListener("click", ()=> {
     document.getElementById("templateswindow").classList.add("active");
     document.getElementById("backdrop").classList.add("active");

@@ -37,6 +37,24 @@ header h1 {
     color:#664b2c;
 }
 
+#player {
+    padding: 6px 22px;
+    border: 1px solid #444;
+    background:transparent;
+    color: #444;
+    cursor: pointer;
+    transition: 0.25s ease;
+}
+
+#player:hover {
+    background: #444;
+    color: white;
+}
+
+#player:active {
+    transform: scale(0.98);
+}
+
 .toolbar {
     width: fit-content;
     margin: 0 auto;
