@@ -142,6 +142,30 @@ header h1 {
     font-family: 'Yuyu';
 }
 
+#generatepalette {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 6px 18px;
+    background: rgba(243, 211, 174, 0.9);
+    border: 1px solid #664b2c;
+    color: #664b2c;
+    font-size: 0.9rem;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: 0.2s ease;
+    z-index: 1000;
+}
+
+#generatepalette:hover {
+    background: #664b2c;
+    color: #fff;
+}
+
+#generatepalette:active {
+    transform: scale(0.98);
+}
+
 .toolbar {
     width: fit-content;
     margin: 0 auto;

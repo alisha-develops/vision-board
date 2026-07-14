@@ -1,9 +1,9 @@
 print(">>> LOADED THE CORRECT MAIN.PY <<<")
 
-import random
 import os
+import random
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
@@ -17,17 +17,20 @@ app.add_middleware(
 )
 
 MUSIC_FOLDER = "music"
+
 app.mount("/music", StaticFiles(directory=MUSIC_FOLDER), name="music")
+
+
 @app.get("/")
 def home():
     return {"message": "alisha's music api!"}
 
 
 @app.get("/api/random")
-def random_track():
+def random_track(request: Request):
     files = [
         f for f in os.listdir(MUSIC_FOLDER)
-        if f.endswith((".mp3",".wav",".ogg"))
+        if f.lower().endswith((".mp3", ".wav", ".ogg"))
     ]
 
     if not files:
@@ -37,22 +40,50 @@ def random_track():
 
     return {
         "name": os.path.splitext(song)[0],
-        "url": f"http://127.0.0.1:8000/music/{song}"
+        "url": str(request.base_url) + f"music/{song}"
     }
 
+
 @app.get("/api/songs")
-def get_songs():
+def get_songs(request: Request):
     files = [
         f for f in os.listdir(MUSIC_FOLDER)
         if f.lower().endswith((".mp3", ".wav", ".ogg"))
     ]
 
-    songs = []
-
-    for song in files:
-        songs.append({
+    return [
+        {
             "name": os.path.splitext(song)[0],
-            "url": f"http://127.0.0.1:8000/music/{song}"
-        })
+            "url": str(request.base_url) + f"music/{song}"
+        }
+        for song in files
+    ]
 
-    return songs
+
+PALETTES = [
+    {
+        "theme": "vintage",
+        "colors": ["#F3D3AE", "#D7B899", "#A67C52", "#664B2C", "#3E3024"]
+    },
+    {
+        "theme": "forest",
+        "colors": ["#6B8F71", "#A3B18A", "#DAD7CD", "#588157", "#3A5A40"]
+    },
+    {
+        "theme": "sunset",
+        "colors": ["#FFB5A7", "#FCD5CE", "#F8EDEB", "#F9DCC4", "#FEC89A"]
+    },
+    {
+        "theme": "ocean",
+        "colors": ["#A8DADC", "#457B9D", "#1D3557", "#F1FAEE", "#5FA8D3"]
+    },
+    {
+        "theme": "coffee",
+        "colors": ["#4B3621", "#8B5E3C", "#C4A484", "#E6D5B8", "#FFF8F0"]
+    }
+]
+
+
+@app.get("/api/palette")
+def get_palette():
+    return random.choice(PALETTES)

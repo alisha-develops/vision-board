@@ -22,7 +22,7 @@ play.addEventListener("click", () => {
 });
 
 async function playRandomMusic() {
-    const response = await fetch("http://127.0.0.1:8000/api/random");
+    // const response = await fetch("http://127.0.0.1:8000/api/random");
     const song = await response.json();
 
     audio.src = song.url;
@@ -37,7 +37,7 @@ async function playRandomMusic() {
 }
 
 async function loadSongs() {
-    const response = await fetch("http://127.0.0.1:8000/api/songs");
+    // const response = await fetch("http://127.0.0.1:8000/api/songs");
     const songs = await response.json();
 
     const songlist = document.getElementById("songlist");
