@@ -1,6 +1,6 @@
 @font-face {
     font-family: 'Yuyu';
-    src: url('/font/Yuyu-Regular.ttf') format('woff2');
+    src: url('font/Yuyu-Regular.ttf') format('woff2');
     font-weight: normal;
     font-style: normal;
 }
@@ -37,31 +37,109 @@ header h1 {
     color:#664b2c;
 }
 
-#player {
+#music {
     position: fixed;
     top: 18px;
     right: 18px;
-    padding: 28px;
-    border: 1px solid rgba(102, 75, 44, 0.45);
-    border-radius: 999px;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
     background: rgba(151, 95, 15, 0.55);
-    backdrop-filter: blur(4px);
-    color: #664b2c;
-    font-family: "Yuyu";
-    font-size: 0.9rem;
-    letter-spacing: 0.5px;
+    border: 1px solid rgba(102, 75, 44, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
-    transition: all .2s ease;
+    font-size: 1.2rem;
+    color: #664b2c;
+    z-index: 999;
+    transition: all 0.2s ease;
 }
 
-#play:hover {
+#music:hover {
     background: #664b2c;
     color: #f7ead7;
-    transform: translateY(-1px);
 }
 
-#play:active {
-    transform: translateY(0);
+#musicwindow {
+    position:fixed;
+    top: 70px;
+    right: 18px;
+    width: 250px;
+    background: rgba(243, 211, 174, 0.97);
+    border: 2px dashed rgb(102, 75, 44);
+    border-radius: 12px;
+    padding: 20px;
+    display: none;
+    z-index: 998;
+    font-family: 'Yuyu';
+    color: #664b2c;
+}
+
+#musicwindow.active {
+    display: block;
+}
+
+#closemusic {
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: #664b2c;
+}
+
+#songlist {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 15px 0;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.songitem {
+    padding: 6px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    border: 1px dashed rgba(102, 75, 44, 0.4);
+    transition: background 0.2s ease;
+}
+
+.songitem:hover {
+    background: rgba(102, 75, 44, 0.15);
+}
+
+.songitem.playing {
+    background: rgba(102, 75, 44, 0.25);
+    font-weight: bold;
+}
+
+#nowplaying {
+    border-top: 1px dashed rgba(102, 75, 44, 0.4);
+    padding-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: center;
+}
+
+#trackname {
+    font-size: 0.8rem;
+    text-align: center;
+}
+
+#play {
+    background: #664b2c;
+    color: #f7ead7;
+    border: none;
+    padding: 6px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Yuyu';
 }
 
 .toolbar {

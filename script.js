@@ -1,5 +1,15 @@
 const audio = document.getElementById("player");
 const play = document.getElementById('play');
+const music = document.getElementById('music');
+const musicwindow = document.getElementById('musicwindow');
+
+music.addEventListener("click", ()=> {
+    musicwindow.classList.toggle("active");
+});
+
+document.getElementById("closemusic").addEventListener("click", () => {
+    musicwindow.classList.remove("active");
+});
 
 play.addEventListener("click", () => {
     if (audio.paused){
@@ -11,13 +21,14 @@ play.addEventListener("click", () => {
     }
 });
 
-async function playRandomMusic(){
+async function playRandomMusic() {
     const response = await fetch("http://127.0.0.1:8000/api/random");
-    const track = await response.json();
+    const song = await response.json();
 
-    audio.src = track.url;
+    audio.src = song.url;
+    document.getElementById("trackname").textContent = song.title;
 
-    try{
+    try {
         await audio.play();
         play.textContent = "❚❚ pause";
     } catch (err) {
@@ -25,7 +36,41 @@ async function playRandomMusic(){
     }
 }
 
+async function loadSongs() {
+    const response = await fetch("http://127.0.0.1:8000/api/songs");
+    const songs = await response.json();
+
+    const songlist = document.getElementById("songlist");
+    songlist.innerHTML = "";
+
+    songs.forEach(song => {
+        const item = document.createElement("div");
+        item.classList.add("songitem");
+        item.textContent = song.name;
+
+        item.addEventListener("click", async () => {
+            document.querySelectorAll(".songitem")
+                .forEach(s => s.classList.remove("playing"));
+
+            item.classList.add("playing");
+
+            audio.src = song.url;
+            document.getElementById("trackname").textContent = song.name;
+
+            try {
+                await audio.play();
+                play.textContent = "❚❚ pause";
+            } catch (err) {
+                play.textContent = "▶ play";
+            }
+        });
+
+        songlist.appendChild(item);
+    });
+}
+
 playRandomMusic();
+loadSongs();
 
 document.getElementById("card1").addEventListener("click", ()=> {
     document.getElementById("templateswindow").classList.add("active");

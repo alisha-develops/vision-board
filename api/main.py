@@ -36,6 +36,23 @@ def random_track():
     song = random.choice(files)
 
     return {
-        "title": os.path.splitext(song)[0],
+        "name": os.path.splitext(song)[0],
         "url": f"http://127.0.0.1:8000/music/{song}"
     }
+
+@app.get("/api/songs")
+def get_songs():
+    files = [
+        f for f in os.listdir(MUSIC_FOLDER)
+        if f.lower().endswith((".mp3", ".wav", ".ogg"))
+    ]
+
+    songs = []
+
+    for song in files:
+        songs.append({
+            "name": os.path.splitext(song)[0],
+            "url": f"http://127.0.0.1:8000/music/{song}"
+        })
+
+    return songs
