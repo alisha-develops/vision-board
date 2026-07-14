@@ -151,6 +151,75 @@ function makeDraggable(el){
         cursor: move;
     `;
 
+    const corners =["nw", "ne", "sw", "se"];
+    corners.forEach(corner =>{
+        const handle = document.createElement("div");
+        handle.style.cssText =`
+            width: 12px;
+            height: 12px;
+            background: #664b2c;
+            position: absolute;
+            z-index: 10;
+            cursor: ${corner}-resize;
+        `;
+        if(corner === "nw"){
+            handle.style.top = "-6px";
+            handle.style.left = "-6px";
+        }
+        if(corner === "ne"){
+            handle.style.top = "-6px";
+            handle.style.right = "-6px";
+        }
+        if(corner === "sw"){
+            handle.style.bottom = "-6px";
+            handle.style.left = "-6px";
+        }
+        if(corner === "se"){
+            handle.style.bottom = "-6px";
+            handle.style.right = "-6px";
+        }
+
+        handle.addEventListener("mousedown", (e) =>{
+            e.stopPropagation();
+            e.preventDefault();
+
+            const startX = e.clientX;
+            const startY = e.clientY;
+            const startW = el.offsetWidth;
+            const startH = el.offsettHeight;
+
+            const onMove = (e) => {
+                const dx = e.clientX - startX;
+                const dy = e.clientY - startY;
+
+                if(corner === "se"){
+                    el.style.width = Math.max(50, startW + dx) + "px";
+                    el.style.height = Math.max(50, startH + dy) + "px";
+                }
+                if(corner === "sw"){
+                    el.style.width = Math.max(50, startW - dx) + "px";
+                    el.style.height = Math.max(50, startH + dy) + "px";
+                }
+                if(corner === "ne"){
+                    el.style.width = Math.max(50, startW + dx) + "px";
+                    el.style.height = Math.max(50, startH - dy) + "px";
+                }
+                if(corner === "nw"){
+                    el.style.width = Math.max(50, startW - dx) + "px";
+                    el.style.height = Math.max(50, startH - dy) + "px";
+                }
+            };
+
+            const onUp = () => {
+                document.removeEventListener("mousemove", onMove);
+                document.removeEventListener("mousemove", onUp);
+            };
+            document.addEventListener("mousemove", onMove);
+            document.addEventListener("mousemove", onUp);
+        });
+        paper.appendChild(handle);
+    });
+
     el.parentNode.insertBefore(paper, el);
     paper.appendChild(el);
     paper.appendChild(grid);
