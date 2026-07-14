@@ -1,10 +1,28 @@
+const audio = document.getElementById("player");
+const play = document.getElementById('play');
+
+play.addEventListener("click", () => {
+    if (audio.paused){
+        audio.play();
+        play.textContent = "❚❚ pause";
+    } else {
+        audio.pause();
+        play.textContent = "▶ play";
+    }
+});
+
 async function playRandomMusic(){
     const response = await fetch("http://127.0.0.1:8000/api/random");
     const track = await response.json();
 
-    const audio = document.getElementById("player");
     audio.src = track.url;
-    audio.play();
+
+    try{
+        await audio.play();
+        play.textContent = "❚❚ pause";
+    } catch (err) {
+        play.textContent = "▶ play";
+    }
 }
 
 playRandomMusic();

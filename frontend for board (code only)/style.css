@@ -1,6 +1,6 @@
 @font-face {
     font-family: 'Yuyu';
-    src: url('font/Yuyu-Regular.ttf') format('woff2');
+    src: url('/font/Yuyu-Regular.ttf') format('woff2');
     font-weight: normal;
     font-style: normal;
 }
@@ -38,21 +38,30 @@ header h1 {
 }
 
 #player {
-    padding: 6px 22px;
-    border: 1px solid #444;
-    background:transparent;
-    color: #444;
+    position: fixed;
+    top: 18px;
+    right: 18px;
+    padding: 28px;
+    border: 1px solid rgba(102, 75, 44, 0.45);
+    border-radius: 999px;
+    background: rgba(151, 95, 15, 0.55);
+    backdrop-filter: blur(4px);
+    color: #664b2c;
+    font-family: "Yuyu";
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
     cursor: pointer;
-    transition: 0.25s ease;
+    transition: all .2s ease;
 }
 
-#player:hover {
-    background: #444;
-    color: white;
+#play:hover {
+    background: #664b2c;
+    color: #f7ead7;
+    transform: translateY(-1px);
 }
 
-#player:active {
-    transform: scale(0.98);
+#play:active {
+    transform: translateY(0);
 }
 
 .toolbar {
