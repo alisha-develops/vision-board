@@ -220,6 +220,9 @@ function makeDraggable(el){
         paper.appendChild(handle);
     });
 
+    const rotate = document.createElement("div")
+    
+
     el.parentNode.insertBefore(paper, el);
     paper.appendChild(el);
     paper.appendChild(grid);
