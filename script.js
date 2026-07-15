@@ -111,8 +111,10 @@ document.getElementById("regenerate").addEventListener("click", () => {
 });
 
 document.getElementById("card1").addEventListener("click", ()=> {
+    desc2.style.opacity = "0";
     document.getElementById("templateswindow").classList.add("active");
     document.getElementById("backdrop").classList.add("active");
+    showWindowFooter();
 })
 document.getElementById("closetemplates").addEventListener("click",()=> {
     document.getElementById("templateswindow").classList.remove("active");
@@ -120,65 +122,85 @@ document.getElementById("closetemplates").addEventListener("click",()=> {
 })
 
 document.getElementById("card2").addEventListener("click", ()=> {
+    desc1.style.opacity = "0";
     document.getElementById("customwindow").classList.add("active");
     document.getElementById("backdrop").classList.add("active");
+    showWindowFooter();
 })
 document.getElementById("closecustom").addEventListener("click",()=> {
     document.getElementById("customwindow").classList.remove("active");
     document.getElementById("backdrop").classList.remove("active");
 })
 
-const arrow1 = document.getElementById("arrow1");
-const arrow2 = document.getElementById("arrow2");
+const title = document.getElementById("title");
+title.innerHTML = "my vision board!".split("").map(char =>
+    `<span style="display:inline-block; opacity:0;">${char === " " ? "&nbsp;" : char}</span>`
+).join("");
+
+gsap.to(title.querySelectorAll("span"), {
+    opacity: 1,
+    duration: 0.05,
+    stagger: 0.06,
+    ease: "none",
+    delay: 0.3
+});
+
 const card1 = document.getElementById("card1");
 const card2 = document.getElementById("card2");
-
-[arrow1, arrow2].forEach(arrow=>{
-    arrow.style.position = "fixed";
-    arrow.style.opacity = "0";
-    arrow.style.width = "60px";
-    arrow.style.transition = "opacity 0.3s ease, left 0.3s ease";
-    arrow.style.pointerEvents = "none";
-    arrow.style.zIndex = "999";
-})
-
 let card1Timer, card2Timer;
+
+const desc1 = document.createElement("p");
+const desc2 = document.createElement("p");
+
+[desc1, desc2].forEach(desc => {
+    desc.style.cssText = "position:fixed; opacity:0; font-family:Yuyu; color:#664b2c; font-size:1.8rem; pointer-events:none; z-index:999;";
+    document.body.appendChild(desc);
+});
+
+function animateText(el, text) {
+    el.innerHTML = text.split("").map(char => 
+        `<span style="display:inline-block; opacity:0; white-space:pre;">${char}</span>`
+    ).join("");
+    el.style.opacity = "1";
+    gsap.to(el.querySelectorAll("span"), {
+        opacity: 1,
+        duration: 0.02,
+        stagger: 0.04,
+        ease: "none"
+    });
+}
 
 card1.addEventListener("mouseenter", () => {
     clearTimeout(card1Timer);
     const rect = card1.getBoundingClientRect();
-    card1.style.transform = "translateX(-80px) scale(0.65) rotate(-4deg)";
-    arrow2.style.top = (rect.top + rect.height/2 - 30) + "px";
-    arrow2.style.left = (rect.left - 20) + "px";
-    arrow2.style.opacity = "1";
-    setTimeout(() => {
-        arrow2.style.left = (rect.right - 80) + "px";
-    }, 10);
+    card1.style.transform = "scale(0.9)";
+    desc2.style.top = (rect.top - 30) + "px";
+    desc2.style.left = (rect.left + rect.width/2 - 100) + "px";
+    animateText(desc2, "pick from ready made layouts!");
 });
 
 card1.addEventListener("mouseleave",()=>{
     card1Timer = setTimeout(() => {
         card1.style.transform = "";
-        arrow2.style.opacity ="0";
+        desc2.style.opacity ="0";
+        desc2.innerHTML = "";
     }, 300);
 });
 
 card2.addEventListener("mouseenter", () =>{
     clearTimeout(card2Timer);
     const rect = card2.getBoundingClientRect();
-    card2.style.transform = "translateX(80px) scale(0.65) rotate(4deg)";
-    arrow1.style.top = (rect.top + rect.height/2 - 30) + "px";
-    arrow1.style.left = (rect.left + 20) + "px";
-    arrow1.style.opacity = "1";
-    setTimeout(() => {
-        arrow1.style.left = (rect.left - 20) + "px";
-    }, 10);
+    card2.style.transform = "scale(0.9)";
+    desc1.style.top = (rect.top - 30) + "px";
+    desc1.style.left = (rect.left + rect.width/2 - 100) + "px";
+    animateText(desc1, "build your own from scratch!");
 });
 
 card2.addEventListener("mouseleave", () =>{
     card2Timer= setTimeout(()=>{
         card2.style.transform = "";
-        arrow1.style.opacity = "0";
+        desc1.style.opacity = "0";
+        desc1.innerHTML = "";
     }, 300);
 });
 
