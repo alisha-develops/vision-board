@@ -45,6 +45,11 @@
                 <button id="text" class="tools">add text</button>
                 <button id="shape" class="tools">shape</button>
                 <button id="bgcolor" class="tools">background color</button>
+                <input
+                    type="color"
+                    id="bgpicker"
+                    style="display:none;"
+                >
                 <button id="empty" class="tools">clear</button>
                 <button id="export" class="features">export canvas</button>
             </div>
@@ -65,6 +70,7 @@
             <p id="pg1">keys: <span class="icons">t</span> for templates and <span class="icons">c</span> for custom</p>
         </div>
     </footer>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
     <script src="script.js"></script>
 </body>

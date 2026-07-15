@@ -75,8 +75,8 @@ async function loadSongs() {
     });
 }
 
-// playRandomMusic();
-// loadSongs();
+playRandomMusic();
+loadSongs();
 
 const genpalette = document.getElementById("generatepalette");
 
@@ -240,55 +240,77 @@ document.getElementById("photoupload").addEventListener("change", (e) =>{
     reader.onload = (event) => {
         const img = document.createElement("img");
         img.src = event.target.result;
-        img.style.cssText = `
-            position: absolute;
-            top: 50px;
-            left: 50px;
-            cursor: move;
-            max-width: 300px;
-        `;
         img.classList.add("uploadedphoto");
-        document.getElementById("board").appendChild(img);
-        makeDraggable(img);
+        createBoardItem(img);
     };
     reader.readAsDataURL(file);
 });
 
-function makeDraggable(el){
-    el.style.userSelect ="none";
+const bgcolor = document.getElementById("bgcolor");
+const bgpicker = document.getElementById("bgpicker");
+const board = document.getElementById("board");
 
+bgcolor.addEventListener("click", () => {
+    bgpicker.click();
+});
+
+bgpicker.addEventListener("input", () => {
+    board.style.backgroundColor = bgpicker.value;
+});
+
+function createBoardItem(el) {
+    const board = document.getElementById("board");
     const paper = document.createElement("div");
-        paper.style.cssText=`
+    paper.classList.add("boarditem");
+    paper.style.cssText = `
         position: absolute;
-        top:50px;
-        left:50px;
-        width:fit-content;
+        top: 50px;
+        left: 50px;
+        width: fit-content;
         cursor: move;
     `;
+    paper.appendChild(el);
+    board.appendChild(paper);
+    enableDragging(paper);
+    enableResize(paper, el);
+    enableRotation(paper);
+    enableSelection(paper);
+}
 
-    const grid= document.createElement("div");
-    grid.style.cssText =`
-        position: absolute;
-        top: 0;
-        left:0;
-        width: 100%;
-        height:100%;
-        pointer-events:none;
-        background-image:linear-gradient(rgba(102,75,44,0.3) 1px, transparent 1px),linear-gradient(90deg, rgba(102,75,44,0.3) 1px, transparent 1px);
-        background-size: 20px 20px;
-        z-index: 5;
-    `;
+function enableDragging(paper){
+    let isDragging = false;
+    let offsetX = 0;
+    let offsetY = 0;
+    const board = document.getElementById("board");
 
-    el.style.cssText = `
-        display: block;
-        max-width: 300px;
-        cursor: move;
-    `;
+    paper.addEventListener("mousedown", (e) => {
+        if (e.target.classList.contains("resizehandle"))return;
+        if (e.target.classList.contains("rotatehandle"))return;
+        isDragging = true;
+        offsetX = e.clientX - paper.offsetLeft;
+        offsetY = e.clientY - paper.offsetTop;
+        e.preventDefault();
+    });
 
-    const corners =["nw", "ne", "sw", "se"];
-    corners.forEach(corner =>{
+    document.addEventListener("mousemove", (e) => {
+        if(!isDragging) return;
+        let left = e.clientX - offsetX;
+        let top = e.clientY - offsetY;
+        left = Math.max(0, Math.min(left, board.clientWidth - paper.offsetWidth));
+        top = Math.max(0, Math.min(top, board.clientHeight - paper.offsetHeight));
+        paper.style.left = left + "px";
+        paper.style.top = top + "px";
+    });
+    document.addEventListener("mouseup", () => {
+        isDragging = false;
+    });
+}
+function enableResize(paper, el){
+    const corners = ["nw", "ne", "sw", "se"];
+    corners.forEach(corner => {
         const handle = document.createElement("div");
-        handle.style.cssText =`
+        handle.classList.add("resizehandle");
+        handle.style.cssText = `
             width: 12px;
             height: 12px;
             background: #664b2c;
@@ -296,27 +318,26 @@ function makeDraggable(el){
             z-index: 10;
             cursor: ${corner}-resize;
         `;
-        if(corner === "nw"){
-            handle.style.top = "-6px";
-            handle.style.left = "-6px";
+        if (corner === "nw") { 
+            handle.style.top = "-6px"; 
+            handle.style.left = "-6px"; 
         }
-        if(corner === "ne"){
-            handle.style.top = "-6px";
-            handle.style.right = "-6px";
+        if (corner === "ne") { 
+            handle.style.top = "-6px"; 
+            handle.style.right = "-6px"; 
         }
-        if(corner === "sw"){
-            handle.style.bottom = "-6px";
-            handle.style.left = "-6px";
+        if (corner === "sw") { 
+            handle.style.bottom = "-6px"; 
+            handle.style.left = "-6px"; 
         }
-        if(corner === "se"){
-            handle.style.bottom = "-6px";
-            handle.style.right = "-6px";
+        if (corner === "se") { 
+            handle.style.bottom = "-6px"; 
+            handle.style.right = "-6px"; 
         }
 
-        handle.addEventListener("mousedown", (e) =>{
+        handle.addEventListener("mousedown", (e) => {
             e.stopPropagation();
             e.preventDefault();
-
             const startX = e.clientX;
             const startY = e.clientY;
             const startW = el.offsetWidth;
@@ -325,40 +346,41 @@ function makeDraggable(el){
             const onMove = (e) => {
                 const dx = e.clientX - startX;
                 const dy = e.clientY - startY;
-
-                if(corner === "se"){
-                    el.style.width = Math.max(50, startW + dx) + "px";
-                    el.style.height = Math.max(50, startH + dy) + "px";
+                if (corner === "se") { 
+                    el.style.width = Math.max(50, startW + dx) + "px"; 
+                    el.style.height = Math.max(50, startH + dy) + "px"; 
                 }
-                if(corner === "sw"){
-                    el.style.width = Math.max(50, startW - dx) + "px";
-                    el.style.height = Math.max(50, startH + dy) + "px";
+                if (corner === "sw") { 
+                    el.style.width = Math.max(50, startW - dx) + "px"; 
+                    el.style.height = Math.max(50, startH + dy) + "px"; 
                 }
-                if(corner === "ne"){
-                    el.style.width = Math.max(50, startW + dx) + "px";
-                    el.style.height = Math.max(50, startH - dy) + "px";
+                if (corner === "ne") { 
+                    el.style.width = Math.max(50, startW + dx) + "px"; 
+                    el.style.height = Math.max(50, startH - dy) + "px"; 
                 }
-                if(corner === "nw"){
-                    el.style.width = Math.max(50, startW - dx) + "px";
-                    el.style.height = Math.max(50, startH - dy) + "px";
+                if (corner === "nw") { 
+                    el.style.width = Math.max(50, startW - dx) + "px"; 
+                    el.style.height = Math.max(50, startH - dy) + "px"; 
                 }
             };
-
             const onUp = () => {
                 document.removeEventListener("mousemove", onMove);
-                document.removeEventListener("mousemove", onUp);
+                document.removeEventListener("mouseup", onUp);
             };
             document.addEventListener("mousemove", onMove);
-            document.addEventListener("mousemove", onUp);
+            document.addEventListener("mouseup", onUp);
         });
         paper.appendChild(handle);
     });
+}
 
-    const rotate = document.createElement("div");
-    rotate.style.cssText = `
+function enableRotation(paper){
+    const handle = document.createElement("div");
+    handle.classList.add("rotatehandle");
+    handle.style.cssText = `
         width: 24px;
         height: 24px;
-        position:absolute;
+        position: absolute;
         bottom: -35px;
         left: 50%;
         transform: translateX(-50%);
@@ -369,15 +391,15 @@ function makeDraggable(el){
         color: #664b2c;
         user-select: none;
     `;
-    rotate.textContent ="↺";
-
+    handle.textContent = "↺";
     let angle = 0;
-    rotate.addEventListener("mousedown", (e)=> {
+
+    handle.addEventListener("mousedown", (e) => {
         e.stopPropagation();
         e.preventDefault();
         const rect = paper.getBoundingClientRect();
-        const centerX = rect.left + rect.width /2;
-        const centerY = rect.top + rect.height /2;
+        const centerX = rect.left + rect.width/2;
+        const centerY = rect.top + rect.height/2;
 
         const onMove = (e) => {
             const dx = e.clientX - centerX;
@@ -392,38 +414,32 @@ function makeDraggable(el){
         document.addEventListener("mousemove", onMove);
         document.addEventListener("mouseup", onUp);
     });
+    paper.appendChild(handle);
+}
 
-    let isDragging = false;
-    let startX, startY;
-
-    paper.addEventListener("mousedown", (e) => {
-        if (e.target !== paper && e.target !== el) return;
-        isDragging = true;
-        startX = e.clientX - paper.offsetLeft;
-        startY = e.clientY - paper.offsetTop;
-        e.preventDefault();
-    });
-
-    document.addEventListener("mousemove",(e) => {
-        if (!isDragging) return;
-        paper.style.left = (e.clientX - startX) + "px";
-        paper.style.top = (e.clientY - startY) + "px";
-    });
-    document.addEventListener("mouseup", () => {
-        isDraggable = false;
-    })
-    
-
-    el.parentNode.insertBefore(paper, el);
-    paper.appendChild(el);
-    paper.appendChild(rotate);
-
-    paper.addEventListener("mousedown", (e) => {
-        e.stopPropagation();
-
-        document.querySelectorAll(".items").forEach(item => {
-            item.classList.remove("selected");
+function enableSelection(paper){
+    paper.addEventListener("mousedown", () => {
+         document.querySelectorAll(".boarditem").forEach(item => {
+            item.style.outline = "none";
         });
-        paper.classList.add("selected");
+        paper.style.outline = "2px dashed #664b2c";
+    });
+}
+
+function deleteSelected() {
+    document.querySelectorAll(".boarditem").forEach(item => {
+        if (item.style.outline !== "none" && item.style.outline !== "") {
+            item.remove();
+        }
+    });
+}
+
+function exportBoard() {
+    const board = document.getElementById("board");
+    html2canvas(board).then(canvas => {
+        const link = document.createElement("a");
+        link.download = "visionboard.png";
+        link.href = canvas.toDataURL();
+        link.click();
     });
 }
