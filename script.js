@@ -25,13 +25,19 @@ async function playRandomMusic() {
     const response = await fetch("https://vision-board-mu.vercel.app/api/random");
     const song = await response.json();
 
+    console.log(song);
+
     audio.src = song.url;
-    document.getElementById("trackname").textContent = song.title;
+    audio.load();
+
+    document.getElementById("trackname").textContent = song.name;
 
     try {
         await audio.play();
+        console.log("playing!");
         play.textContent = "❚❚ pause";
     } catch (err) {
+        console.error("Autoplay failed:", err);
         play.textContent = "▶ play";
     }
 }
@@ -71,6 +77,38 @@ async function loadSongs() {
 
 playRandomMusic();
 loadSongs();
+
+const genpalette = document.getElementById("generatepalette");
+
+genpalette.addEventListener("click", () => {
+    const palettewindow = document.getElementById("palettewindow");
+    palettewindow.classList.toggle("active");
+    if (palettewindow.classList.contains("active")) {
+        generatePalette();
+    }
+});
+
+async function generatePalette() {
+    const response = await fetch("https://vision-board-mu.vercel.app/api/palette");
+    const data = await response.json();
+
+    document.getElementById("palettetitle").textContent = data.theme;
+
+    const box5 = document.getElementById("palettecolors");
+    box5.innerHTML = "";
+
+    data.colors.forEach(color => {
+        const swatch = document.createElement("div");
+        swatch.classList.add("colorswatch");
+        swatch.style.backgroundColor = color;
+        swatch.title = color;
+        box5.appendChild(swatch);
+    });
+}
+
+document.getElementById("regenerate").addEventListener("click", () => {
+    generatePalette();
+});
 
 document.getElementById("card1").addEventListener("click", ()=> {
     document.getElementById("templateswindow").classList.add("active");

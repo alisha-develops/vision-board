@@ -166,6 +166,81 @@ header h1 {
     transform: scale(0.98);
 }
 
+#palettewindow {
+    position: fixed;
+    bottom: 60px;
+    right: 20px;
+    width: 220px;
+    background: rgba(243, 211, 174, 0.97);
+    border: 2px dashed rgb(102, 75, 44);
+    border-radius: 12px;
+    padding: 15px;
+    display: none;
+    z-index: 998;
+    font-family: 'Yuyu';
+    color: #664b2c;
+}
+
+#palettewindow.active {
+    display: block;
+}
+
+#palettetitle {
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+    text-align: center;
+    text-transform: capitalize;
+}
+
+#palettecolors {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    justify-content: center;
+}
+
+.colorswatch {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    border: 2px solid rgba(102, 75, 44, 0.3);
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.colorswatch:hover {
+    transform: scale(1.2);
+}
+
+#regenerate {
+    display: block;
+    margin: 10px auto 0;
+    padding: 5px 14px;
+    background: transparent;
+    border: 1px dashed #664b2c;
+    color: #664b2c;
+    font-family: 'Yuyu';
+    font-size: 0.8rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+#regenerate:hover {
+    background: #664b2c;
+    color: #f7ead7;
+}
+
+#apilink {
+    display: block;
+    text-align: center;
+    font-size: 0.7rem;
+    color: #664b2c;
+    margin-top: 8px;
+    opacity: 0.7;
+    font-family: 'Yuyu';
+}
+
 .toolbar {
     width: fit-content;
     margin: 0 auto;

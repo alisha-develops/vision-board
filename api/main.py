@@ -80,6 +80,46 @@ PALETTES = [
     {
         "theme": "coffee",
         "colors": ["#4B3621", "#8B5E3C", "#C4A484", "#E6D5B8", "#FFF8F0"]
+    },
+    {
+        "theme": "lavender dream",
+        "colors": ["#E8D5F5", "#C9A8E0", "#A67BC8", "#7B4F9E", "#4A2570"]
+    },
+    {
+        "theme": "cherry blossom",
+        "colors": ["#FFE4E6", "#FFADB5", "#FF7B8A", "#D94F5E", "#A3243A"]
+    },
+    {
+        "theme": "mint fresh",
+        "colors": ["#E0F5F1", "#A8E6DA", "#5CC8B8", "#2A9D8F", "#1A6B65"]
+    },
+    {
+        "theme": "golden hour",
+        "colors": ["#FFF3CD", "#FFD97D", "#EFA00B", "#C47A00", "#7A4A00"]
+    },
+    {
+        "theme": "arctic",
+        "colors": ["#EEF4F8", "#C5D9E8", "#8BB4D0", "#4A8FB5", "#1D5E82"]
+    },
+    {
+        "theme": "rose gold",
+        "colors": ["#FFF0F0", "#F4C2C2", "#E8A0A0", "#C97B7B", "#9E4A4A"]
+    },
+    {
+        "theme": "midnight",
+        "colors": ["#0D0D2B", "#1A1A4E", "#2D2D7A", "#4444A8", "#6B6BD4"]
+    },
+    {
+        "theme": "autumn",
+        "colors": ["#FF6B35", "#F7931E", "#FFD700", "#8B4513", "#2D1810"]
+    },
+    {
+        "theme": "bubblegum",
+        "colors": ["#FF9ECD", "#FFB3D9", "#FFC8E4", "#FFD4ED", "#FFE8F5"]
+    },
+    {
+        "theme": "earthy",
+        "colors": ["#8B6355", "#A07855", "#C4A882", "#DDD0B8", "#F5F0E8"]
     }
 ]
 
