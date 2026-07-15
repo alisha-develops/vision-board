@@ -75,8 +75,8 @@ async function loadSongs() {
     });
 }
 
-playRandomMusic();
-loadSongs();
+// playRandomMusic();
+// loadSongs();
 
 const genpalette = document.getElementById("generatepalette");
 
@@ -393,7 +393,7 @@ function makeDraggable(el){
         document.addEventListener("mouseup", onUp);
     });
 
-    let isDraggable = false;
+    let isDragging = false;
     let startX, startY;
 
     paper.addEventListener("mousedown", (e) => {
@@ -416,6 +416,14 @@ function makeDraggable(el){
 
     el.parentNode.insertBefore(paper, el);
     paper.appendChild(el);
-    paper.appendChild(grid);
     paper.appendChild(rotate);
+
+    paper.addEventListener("mousedown", (e) => {
+        e.stopPropagation();
+
+        document.querySelectorAll(".items").forEach(item => {
+            item.classList.remove("selected");
+        });
+        paper.classList.add("selected");
+    });
 }
