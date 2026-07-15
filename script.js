@@ -248,7 +248,7 @@ document.getElementById("photoupload").addEventListener("change", (e) =>{
             max-width: 300px;
         `;
         img.classList.add("uploadedphoto");
-        document.getElementById("customwindow").appendChild(img);
+        document.getElementById("board").appendChild(img);
         makeDraggable(img);
     };
     reader.readAsDataURL(file);
@@ -320,7 +320,7 @@ function makeDraggable(el){
             const startX = e.clientX;
             const startY = e.clientY;
             const startW = el.offsetWidth;
-            const startH = el.offsettHeight;
+            const startH = el.offsetHeight;
 
             const onMove = (e) => {
                 const dx = e.clientX - startX;
@@ -354,10 +354,68 @@ function makeDraggable(el){
         paper.appendChild(handle);
     });
 
-    const rotate = document.createElement("div")
+    const rotate = document.createElement("div");
+    rotate.style.cssText = `
+        width: 24px;
+        height: 24px;
+        position:absolute;
+        bottom: -35px;
+        left: 50%;
+        transform: translateX(-50%);
+        cursor: grab;
+        z-index: 10;
+        font-size: 18px;
+        text-align: center;
+        color: #664b2c;
+        user-select: none;
+    `;
+    rotate.textContent ="↺";
+
+    let angle = 0;
+    rotate.addEventListener("mousedown", (e)=> {
+        e.stopPropagation();
+        e.preventDefault();
+        const rect = paper.getBoundingClientRect();
+        const centerX = rect.left + rect.width /2;
+        const centerY = rect.top + rect.height /2;
+
+        const onMove = (e) => {
+            const dx = e.clientX - centerX;
+            const dy = e.clientY - centerY;
+            angle = Math.atan2(dy, dx) * (180 / Math.PI) + 90;
+            paper.style.transform = `rotate(${angle}deg)`;
+        };
+        const onUp = () => {
+            document.removeEventListener("mousemove", onMove);
+            document.removeEventListener("mouseup", onUp);
+        };
+        document.addEventListener("mousemove", onMove);
+        document.addEventListener("mouseup", onUp);
+    });
+
+    let isDraggable = false;
+    let startX, startY;
+
+    paper.addEventListener("mousedown", (e) => {
+        if (e.target !== paper && e.target !== el) return;
+        isDragging = true;
+        startX = e.clientX - paper.offsetLeft;
+        startY = e.clientY - paper.offsetTop;
+        e.preventDefault();
+    });
+
+    document.addEventListener("mousemove",(e) => {
+        if (!isDragging) return;
+        paper.style.left = (e.clientX - startX) + "px";
+        paper.style.top = (e.clientY - startY) + "px";
+    });
+    document.addEventListener("mouseup", () => {
+        isDraggable = false;
+    })
     
 
     el.parentNode.insertBefore(paper, el);
     paper.appendChild(el);
     paper.appendChild(grid);
+    paper.appendChild(rotate);
 }

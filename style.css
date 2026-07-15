@@ -345,6 +345,16 @@ header h1 {
     cursor: pointer;
 }
 
+#board {
+    width: 100%;
+    height: calc(100% - 70px);
+    margin-top: 12px;
+    background: #f8f4ec;
+    border: 2px dashed #664b2c;
+    overflow: hidden;
+    position: relative;
+}
+
 footer {
     margin-top: auto;
     width: 100%;
