@@ -313,7 +313,10 @@ function enableResize(paper, el){
         handle.style.cssText = `
             width: 12px;
             height: 12px;
-            background: #664b2c;
+            background: #4A90D9;
+            border: 2px solid white;
+            border-radius: 50%;
+            box-sizing: border-box;
             position: absolute;
             z-index: 10;
             cursor: ${corner}-resize;
@@ -334,6 +337,7 @@ function enableResize(paper, el){
             handle.style.bottom = "-6px"; 
             handle.style.right = "-6px"; 
         }
+        handle.style.display = "none";
 
         handle.addEventListener("mousedown", (e) => {
             e.stopPropagation();
@@ -388,10 +392,11 @@ function enableRotation(paper){
         z-index: 10;
         font-size: 18px;
         text-align: center;
-        color: #664b2c;
+        color: #4A90D9;
         user-select: none;
     `;
     handle.textContent = "↺";
+    handle.style.display = "none";
     let angle = 0;
 
     handle.addEventListener("mousedown", (e) => {
@@ -418,28 +423,139 @@ function enableRotation(paper){
 }
 
 function enableSelection(paper){
-    paper.addEventListener("mousedown", () => {
-         document.querySelectorAll(".boarditem").forEach(item => {
-            item.style.outline = "none";
+    paper.addEventListener("mousedown", (e) => {
+        e.stopPropagation();
+        deselectAll();
+
+        paper.classList.add("selected");
+        paper.style.outline = "2px solid #4A90D9";
+        paper.querySelectorAll(".resizehandle, .rotatehandle").forEach(handle => {
+            handle.style.display = "block";
         });
-        paper.style.outline = "2px dashed #664b2c";
+
+        showControls(paper);
     });
+}
+
+function deselectAll() {
+    document.querySelectorAll(".boarditem").forEach(item => {
+        item.style.outline = "none";
+        item.classList.remove("selected");
+        item.querySelectorAll(".resizehandle, .rotatehandle").forEach(handle => {
+            handle.style.display = "none";
+        });
+    });
+    hideControls();
+}
+document.getElementById("board").addEventListener("mousedown", () => {
+    deselectAll();
+});
+
+function showControls(paper){
+    let panel = document.getElementById("controlpanel");
+    if(!panel) {
+        panel = document.createElement("div");
+        panel.id = "controlpanel";
+        panel.style.cssText =`
+            position: fixed;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(243, 211, 174, 0.97);
+            border: 2px dashed #664b2c;
+            border-radius: 10px;
+            padding: 8px 15px;
+            display: flex;
+            gap: 10px;
+            z-index: 9999;
+            font-family: Yuyu;
+        `;
+        document.body.appendChild(panel);
+    }
+    panel.innerHTML = "";
+    panel.style.display = "flex";
+
+    const buttons = [
+        { label: "↑ front", action: () => { 
+            paper.style.zIndex = getMaxZ() + 1; 
+        }},
+        { label: "↓ back", action: () =>{ 
+            paper.style.zIndex = Math.max(0, getMinZ() - 1); 
+        }},
+        { label: "🗑 delete", action: () => { 
+            paper.remove(); hideControls(); 
+        }},
+    ];
+
+    buttons.forEach(btn => {
+        const b = document.createElement("button");
+        b.textContent = btn.label;
+        b.style.cssText = `
+            background: transparent;
+            border: 1px dashed #664b2c;
+            color: #664b2c;
+            padding: 4px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: Yuyu;
+            font-size: 0.8rem;
+        `;
+        b.addEventListener("click", btn.action);
+        panel.appendChild(b);
+    });
+}
+
+function hideControls() {
+    const panel = document.getElementById("controlpanel");
+    if(panel){
+        panel.style.display = "none";
+    }
+}
+
+function getMaxZ() {
+    let max = 0;
+    document.querySelectorAll(".boarditem").forEach(item => {
+        const z = parseInt(item.style.zIndex);
+        if (z > max) max = z;
+    });
+    return max;
+}
+
+function getMinZ() {
+    let min = 999;
+    document.querySelectorAll(".boarditem").forEach(item => {
+        const z = parseInt(item.style.zIndex);
+        if (z < min) min = z;
+    });
+    return min;
 }
 
 function deleteSelected() {
-    document.querySelectorAll(".boarditem").forEach(item => {
-        if (item.style.outline !== "none" && item.style.outline !== "") {
-            item.remove();
-        }
+    document.querySelectorAll(".boarditem.selected").forEach(item => {
+        item.remove();
     });
+    hideControls();
+}
+
+function clearBoard() {
+    const board = document.getElementById("board");
+    board.innerHTML = "";
+    board.style.background = "";
+    board.style.backgroundColor = "";
+    board.style.backgroundImage = "";
+    deselectAll();
+    hideControls();
 }
 
 function exportBoard() {
-    const board = document.getElementById("board");
-    html2canvas(board).then(canvas => {
+    html2canvas(document.getElementById("board"),{
+        scale: 3
+    }).then(canvas => {
         const link = document.createElement("a");
         link.download = "visionboard.png";
         link.href = canvas.toDataURL();
         link.click();
     });
 }
+document.getElementById("empty").addEventListener("click", clearBoard);
+document.getElementById("export").addEventListener("click", exportBoard);
