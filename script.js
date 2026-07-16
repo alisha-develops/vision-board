@@ -1,3 +1,17 @@
+const draw = document.getElementById("draw");
+const drawOptions = document.getElementById("drawoptions");
+
+draw.addEventListener("click", (e) => {
+    e.stopPropagation();
+
+    drawOptions.style.display =
+        drawOptions.style.display === "block" ? "none" : "block";
+});
+
+document.addEventListener("click", () => {
+    drawOptions.style.display = "none";
+});
+
 const audio = document.getElementById("player");
 const play = document.getElementById('play');
 const music = document.getElementById('music');

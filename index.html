@@ -39,7 +39,15 @@
             <button id="closecustom">✕</button>
             <div class="toolbar">
                 <button id="new" class="tools">new board</button>
-                <button id="draw" class="tools">pencil</button>
+                <div id="drawmenu" class="dropdown">
+                    <button id="draw" class="tools">draw ↓</button>
+                    <div id="drawoptions" class="dropdowncontent">
+                        <button class="drawtool" data-tool="pencil">pencil</button>
+                        <button class="drawtool" data-tool="marker">marker</button>
+                        <button class="drawtool" data-tool="highlighter">highlighter</button>
+                        <button class="drawtool" data-tool="eraser">eraser</button>
+                    </div>
+                </div>
                 <button id="upload" class="tools">add photo</button>
                 <input type="file" id="photoupload" accept="image/*" style="display:none;">
                 <button id="text" class="tools">add text</button>
