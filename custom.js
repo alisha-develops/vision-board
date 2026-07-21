@@ -710,3 +710,6 @@ function exportBoard() {
 document.getElementById("empty").addEventListener("click", clearBoard);
 document.getElementById("export").addEventListener("click", exportBoard);
 
+const SNAP_THRESHOLD =  5;
+let guideLines = [];
+
