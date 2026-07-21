@@ -247,7 +247,10 @@ document.addEventListener("keydown", (e) => {
 });
 
 document.getElementById("upload").addEventListener("click", () => {
-    canvas.style.pointerEvents = "none";
+    // drawMode = false;
+    // canvas.style.pointerEvents = "none";
+    // canvas.style.zIndex = "1";
+    // canvas.style.cursor = "default";
     document.getElementById("photoupload").click();
 });
 
@@ -279,102 +282,117 @@ document.addEventListener("click", () => {
     drawOptions.style.display = "none";
 });
 
-let currentTool = "pencil";
-let drawing = false;
-let drawMode = false;
-const drawingBoard = document.getElementById("board");
-
-const canvas = document.createElement("canvas");
-canvas.id = "drawingcanvas";
-drawingBoard.appendChild(canvas);
-canvas.style.cssText = `
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 1;
-    pointer-events: none;
-`;
-
-const ctx = canvas.getContext("2d");
-
-function resizeCanvas(){
-    canvas.width = drawingBoard.clientWidth;
-    canvas.height = drawingBoard.clientHeight;
-}
-resizeCanvas();
-window.addEventListener("resize", resizeCanvas);
-
-let lastX = 0;
-let lastY = 0;
-function getMousePosition(e){
-    const rect = canvas.getBoundingClientRect();
-
-    return {
-        x: e.clientX - rect.left,
-        y: e.clientY - rect.top
-    };
-}
-
-function setBrush(){
-    ctx.globalCompositeOperation = "source-over";
-    ctx.globalAlpha = 1;
-
-    switch(currentTool){
-        case "pencil":
-            ctx.strokeStyle = "#664b2c";
-            ctx.lineWidth = 2;
-            canvas.style.cursor = "crosshair";
-            break;
-        case "marker":
-            ctx.strokeStyle = "#664b2c";
-            ctx.lineWidth = 6;
-            canvas.style.cursor = "crosshair";
-            break;
-        case "highlighter":
-            ctx.strokeStyle = "#FFF176";
-            ctx.lineWidth = 18;
-            ctx.globalAlpha = 0.35;
-            canvas.style.cursor = "crosshair";
-            break;
-        case "eraser":
-            ctx.globalCompositeOperation = "destination-out";
-            ctx.lineWidth = 20;
-            canvas.style.cursor = "cell";
-            break;
-    }
-}
-
-canvas.addEventListener("mousedown",(e) => {
-    drawing = true;
-    setBrush();
-
-    const pos = getMousePosition(e);
-    lastX = pos.x;
-    lastY = pos.y;
-});
-
-canvas.addEventListener("mousemove",(e) => {
-    if (!drawing) return;
-
-    const pos = getMousePosition(e);
-
-    ctx.beginPath();
-    ctx.moveTo(lastX, lastY);
-    ctx.lineTo(pos.x, pos.y);
-    ctx.stroke();
-
-    lastX = pos.x;
-    lastY = pos.y;
-});
-document.addEventListener("mouseup", ()=> {
-    drawing = false;
-})
-
 document.addEventListener("click", (e) => {
     if (e.target.classList.contains("drawtool")) return;
     if (e.target === draw) return;
     drawOptions.style.display = "none";
 });
+
+
+// let currentTool = "pencil";
+// let drawing = false;
+// let drawMode = false;
+// const drawingBoard = document.getElementById("board");
+
+// const canvas = document.createElement("canvas");
+// canvas.id = "drawingcanvas";
+// drawingBoard.appendChild(canvas);
+// canvas.style.cssText = `
+//     position: absolute;
+//     top: 0;
+//     left: 0;
+//     z-index: 1;
+//     pointer-events: none;
+// `;
+
+// document.querySelectorAll(".drawtool").forEach(btn => {
+//     btn.addEventListener("click", (e) => {
+//         e.stopPropagation();
+//         currentTool = btn.dataset.tool;
+//         drawMode = true;
+//         canvas.style.pointerEvents = "all";
+//         canvas.style.zIndex = "999";
+//         canvas.style.cursor = "crosshair";
+//         document.querySelectorAll(".drawtool").forEach(b => b.classList.remove("active"));
+//         btn.classList.add("active");
+//         drawOptions.style.display = "none";
+//     });
+// });
+
+// const ctx = canvas.getContext("2d");
+
+// function resizeCanvas(){
+//     canvas.width = drawingBoard.clientWidth;
+//     canvas.height = drawingBoard.clientHeight;
+// }
+// resizeCanvas();
+// window.addEventListener("resize", resizeCanvas);
+
+// let lastX = 0;
+// let lastY = 0;
+// function getMousePosition(e){
+//     const rect = canvas.getBoundingClientRect();
+
+//     return {
+//         x: e.clientX - rect.left,
+//         y: e.clientY - rect.top
+//     };
+// }
+
+// function setBrush(){
+//     ctx.globalCompositeOperation = "source-over";
+//     ctx.globalAlpha = 1;
+
+//     switch(currentTool){
+//         case "pencil":
+//             ctx.strokeStyle = "#664b2c";
+//             ctx.lineWidth = 2;
+//             canvas.style.cursor = "crosshair";
+//             break;
+//         case "marker":
+//             ctx.strokeStyle = "#664b2c";
+//             ctx.lineWidth = 6;
+//             canvas.style.cursor = "crosshair";
+//             break;
+//         case "highlighter":
+//             ctx.strokeStyle = "#FFF176";
+//             ctx.lineWidth = 18;
+//             ctx.globalAlpha = 0.35;
+//             canvas.style.cursor = "crosshair";
+//             break;
+//         case "eraser":
+//             ctx.globalCompositeOperation = "destination-out";
+//             ctx.lineWidth = 20;
+//             canvas.style.cursor = "cell";
+//             break;
+//     }
+// }
+
+// canvas.addEventListener("mousedown",(e) => {
+//     drawing = true;
+//     setBrush();
+
+//     const pos = getMousePosition(e);
+//     lastX = pos.x;
+//     lastY = pos.y;
+// });
+
+// canvas.addEventListener("mousemove",(e) => {
+//     if (!drawing) return;
+
+//     const pos = getMousePosition(e);
+
+//     ctx.beginPath();
+//     ctx.moveTo(lastX, lastY);
+//     ctx.lineTo(pos.x, pos.y);
+//     ctx.stroke();
+
+//     lastX = pos.x;
+//     lastY = pos.y;
+// });
+// document.addEventListener("mouseup", ()=> {
+//     drawing = false;
+// })
 
 const bgcolor = document.getElementById("bgcolor");
 const bgpicker = document.getElementById("bgpicker");
@@ -577,9 +595,11 @@ function deselectAll() {
     });
     hideControls();
 }
-document.getElementById("board").addEventListener("mousedown", () => {
+document.getElementById("board").addEventListener("mousedown", (e) => {
+    // if (drawMode) return;
     deselectAll();
 });
+
 
 function showControls(paper){
     let panel = document.getElementById("controlpanel");
