@@ -192,6 +192,15 @@ header h1 {
     text-transform: capitalize;
 }
 
+#copystatus {
+    height: 18px;
+    margin: 8px 0;
+    color: #664b2c;
+    font-size: 0.8rem;
+    font-family: Yuyu;
+    text-align: center;
+}
+
 #palettecolors {
     display: flex;
     flex-direction: row;
@@ -386,6 +395,14 @@ header h1 {
     border: 2px dashed #664b2c;
     overflow: hidden;
     position: relative;
+}
+
+#drawingcanvas{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    pointer-events:auto;
 }
 
 footer {

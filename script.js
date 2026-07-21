@@ -1,17 +1,3 @@
-const draw = document.getElementById("draw");
-const drawOptions = document.getElementById("drawoptions");
-
-draw.addEventListener("click", (e) => {
-    e.stopPropagation();
-
-    drawOptions.style.display =
-        drawOptions.style.display === "block" ? "none" : "block";
-});
-
-document.addEventListener("click", () => {
-    drawOptions.style.display = "none";
-});
-
 const audio = document.getElementById("player");
 const play = document.getElementById('play');
 const music = document.getElementById('music');
@@ -89,8 +75,8 @@ async function loadSongs() {
     });
 }
 
-playRandomMusic();
-loadSongs();
+// playRandomMusic();
+// loadSongs();
 
 const genpalette = document.getElementById("generatepalette");
 
@@ -115,7 +101,25 @@ async function generatePalette() {
         const swatch = document.createElement("div");
         swatch.classList.add("colorswatch");
         swatch.style.backgroundColor = color;
-        swatch.title = color;
+        swatch.title = "Click to copy " + color;
+
+        swatch.addEventListener("click", async () => {
+            try {
+                await navigator.clipboard.writeText(color);
+                const status = document.getElementById("copystatus");
+                status.textContent = `✓ copied ${color}`;
+                setTimeout(() => {
+                    status.textContent = "";
+                }, 1200);
+                
+                swatch.title = "copied!";
+                setTimeout(() => {
+                    swatch.title = "Click to copy " + color;
+                }, 1000);
+            } catch (err) {
+                console.error("Failed to copy:", err);
+            }
+        });
         box5.appendChild(swatch);
     });
 }
@@ -242,7 +246,8 @@ document.addEventListener("keydown", (e) => {
     }
 });
 
-document.getElementById("upload").addEventListener("click",()=> {
+document.getElementById("upload").addEventListener("click", () => {
+    canvas.style.pointerEvents = "none";
     document.getElementById("photoupload").click();
 });
 
@@ -258,6 +263,117 @@ document.getElementById("photoupload").addEventListener("change", (e) =>{
         createBoardItem(img);
     };
     reader.readAsDataURL(file);
+});
+
+const draw = document.getElementById("draw");
+const drawOptions = document.getElementById("drawoptions");
+
+draw.addEventListener("click", (e) => {
+    e.stopPropagation();
+
+    drawOptions.style.display =
+        drawOptions.style.display === "block" ? "none" : "block";
+});
+
+document.addEventListener("click", () => {
+    drawOptions.style.display = "none";
+});
+
+let currentTool = "pencil";
+let drawing = false;
+let drawMode = false;
+const drawingBoard = document.getElementById("board");
+
+const canvas = document.createElement("canvas");
+canvas.id = "drawingcanvas";
+drawingBoard.appendChild(canvas);
+canvas.style.cssText = `
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    pointer-events: none;
+`;
+
+const ctx = canvas.getContext("2d");
+
+function resizeCanvas(){
+    canvas.width = drawingBoard.clientWidth;
+    canvas.height = drawingBoard.clientHeight;
+}
+resizeCanvas();
+window.addEventListener("resize", resizeCanvas);
+
+let lastX = 0;
+let lastY = 0;
+function getMousePosition(e){
+    const rect = canvas.getBoundingClientRect();
+
+    return {
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top
+    };
+}
+
+function setBrush(){
+    ctx.globalCompositeOperation = "source-over";
+    ctx.globalAlpha = 1;
+
+    switch(currentTool){
+        case "pencil":
+            ctx.strokeStyle = "#664b2c";
+            ctx.lineWidth = 2;
+            canvas.style.cursor = "crosshair";
+            break;
+        case "marker":
+            ctx.strokeStyle = "#664b2c";
+            ctx.lineWidth = 6;
+            canvas.style.cursor = "crosshair";
+            break;
+        case "highlighter":
+            ctx.strokeStyle = "#FFF176";
+            ctx.lineWidth = 18;
+            ctx.globalAlpha = 0.35;
+            canvas.style.cursor = "crosshair";
+            break;
+        case "eraser":
+            ctx.globalCompositeOperation = "destination-out";
+            ctx.lineWidth = 20;
+            canvas.style.cursor = "cell";
+            break;
+    }
+}
+
+canvas.addEventListener("mousedown",(e) => {
+    drawing = true;
+    setBrush();
+
+    const pos = getMousePosition(e);
+    lastX = pos.x;
+    lastY = pos.y;
+});
+
+canvas.addEventListener("mousemove",(e) => {
+    if (!drawing) return;
+
+    const pos = getMousePosition(e);
+
+    ctx.beginPath();
+    ctx.moveTo(lastX, lastY);
+    ctx.lineTo(pos.x, pos.y);
+    ctx.stroke();
+
+    lastX = pos.x;
+    lastY = pos.y;
+});
+document.addEventListener("mouseup", ()=> {
+    drawing = false;
+})
+
+document.addEventListener("click", (e) => {
+    if (e.target.classList.contains("drawtool")) return;
+    if (e.target === draw) return;
+    drawOptions.style.display = "none";
 });
 
 const bgcolor = document.getElementById("bgcolor");
@@ -573,3 +689,4 @@ function exportBoard() {
 }
 document.getElementById("empty").addEventListener("click", clearBoard);
 document.getElementById("export").addEventListener("click", exportBoard);
+
