@@ -272,8 +272,8 @@ header h1 {
 
 #textwindow {
     position: fixed;
-    bottom: 60px;
-    right: 260px;
+    top: 200px;
+    left: 400px;
     width: 250px;
     background: rgba(243, 211, 174, 0.97);
     border: 2px dashed #664b2c;
@@ -294,6 +294,8 @@ header h1 {
     font-size: 1.1rem;
     margin-bottom: 15px;
     text-transform: lowercase;
+    cursor: move;
+    user-select: none;
 }
 
 .textgroup {
@@ -313,6 +315,22 @@ header h1 {
     border-radius: 8px;
     background: transparent;
     cursor: pointer;
+    padding: 0;
+}
+
+#textcolor::-webkit-color-swatch-wrapper {
+    padding: 0;
+    border-radius: 8px;
+}
+
+#textcolor::-webkit-color-swatch {
+    border: none;
+    border-radius: 8px;
+}
+
+#textcolor::-moz-color-swatch {
+    border: none;
+    border-radius: 8px;
 }
 
 #hexinput {

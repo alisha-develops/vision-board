@@ -89,39 +89,53 @@ genpalette.addEventListener("click", () => {
 });
 
 async function generatePalette() {
-    const response = await fetch("https://vision-board-mu.vercel.app/api/palette");
-    const data = await response.json();
-
-    document.getElementById("palettetitle").textContent = data.theme;
-
     const box5 = document.getElementById("palettecolors");
+    const paletteTitle = document.getElementById("palettetitle");
+
+    paletteTitle.textContent = "Loading palette...";
     box5.innerHTML = "";
 
-    data.colors.forEach(color => {
-        const swatch = document.createElement("div");
-        swatch.classList.add("colorswatch");
-        swatch.style.backgroundColor = color;
-        swatch.title = "Click to copy " + color;
+    try {
+        const response = await fetch("https://vision-board-mu.vercel.app/api/palette");
 
-        swatch.addEventListener("click", async () => {
-            try {
-                await navigator.clipboard.writeText(color);
-                const status = document.getElementById("copystatus");
-                status.textContent = `✓ copied ${color}`;
-                setTimeout(() => {
-                    status.textContent = "";
-                }, 1200);
-                
-                swatch.title = "copied!";
-                setTimeout(() => {
-                    swatch.title = "Click to copy " + color;
-                }, 1000);
-            } catch (err) {
-                console.error("Failed to copy:", err);
-            }
+        if (response.ok === false) {
+            paletteTitle.textContent = "Couldn't load palette, try again";
+            return;
+        }
+
+        const data = await response.json();
+
+        paletteTitle.textContent = data.theme;
+
+        data.colors.forEach(color => {
+            const swatch = document.createElement("div");
+            swatch.classList.add("colorswatch");
+            swatch.style.backgroundColor = color;
+            swatch.title = "Click to copy " + color;
+
+            swatch.addEventListener("click", async () => {
+                try {
+                    await navigator.clipboard.writeText(color);
+                    const status = document.getElementById("copystatus");
+                    status.textContent = `✓ copied ${color}`;
+                    setTimeout(() => {
+                        status.textContent = "";
+                    }, 1200);
+
+                    swatch.title = "copied!";
+                    setTimeout(() => {
+                        swatch.title = "Click to copy " + color;
+                    }, 1000);
+                } catch (err) {
+                    console.error("Failed to copy:", err);
+                }
+            });
+            box5.appendChild(swatch);
         });
-        box5.appendChild(swatch);
-    });
+    } catch (err) {
+        paletteTitle.textContent = "Couldn't load palette, try again";
+        console.error("Failed to fetch palette:", err);
+    }
 }
 
 document.getElementById("regenerate").addEventListener("click", () => {
@@ -331,6 +345,12 @@ document.getElementById("text").addEventListener("click", () => {
     text.spellcheck = false;
     text.textContent = "Double-click to edit";
 
+    activeTextItem = text;
+
+    text.addEventListener("mousedown", () => {
+        activeTextItem = text;
+    });
+
     text.addEventListener("dblclick", () => {
         text.contentEditable = true;
         text.focus();
@@ -354,6 +374,34 @@ document.getElementById("text").addEventListener("click", () => {
 
 });
 
+const textColorInput = document.getElementById("textcolor");
+const hexInput = document.getElementById("hexinput");
+
+let activeTextItem = null;
+
+function applyTextColor(color) {
+    if (activeTextItem !== null) {
+        activeTextItem.style.color = color;
+    }
+}
+
+textColorInput.addEventListener("input", () => {
+    const color = textColorInput.value;
+    hexInput.value = color;
+    applyTextColor(color);
+});
+
+hexInput.addEventListener("input", () => {
+    const value = hexInput.value.trim();
+    const isValidHex = /^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/.test(value);
+
+    if (isValidHex) {
+        textColorInput.value = value;
+        applyTextColor(value);
+    }
+});
+
+
 const textSettings = document.getElementById("textsettings");
 const textWindow = document.getElementById("textwindow");
 
@@ -367,6 +415,35 @@ document.getElementById("closetextwindow").addEventListener("click", () => {
     textWindow.classList.remove("active");
 });
 
+const textWindowHeader = textWindow.querySelector("h3");
+
+let isDraggingWindow = false;
+let dragOffsetX = 0;
+let dragOffsetY = 0;
+
+textWindowHeader.addEventListener("mousedown", (event) => {
+    isDraggingWindow = true;
+
+    const rect = textWindow.getBoundingClientRect();
+    dragOffsetX = event.clientX - rect.left;
+    dragOffsetY = event.clientY - rect.top;
+});
+
+document.addEventListener("mousemove", (event) => {
+    if (isDraggingWindow === false) {
+        return;
+    }
+
+    let newLeft = event.clientX - dragOffsetX;
+    let newTop = event.clientY - dragOffsetY;
+
+    textWindow.style.left = newLeft + "px";
+    textWindow.style.top = newTop + "px";
+});
+
+document.addEventListener("mouseup", () => {
+    isDraggingWindow = false;
+});
 
 function enableDragging(paper){
     let isDragging = false;
