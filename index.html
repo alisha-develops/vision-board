@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat&family=Playfair+Display&family=Poppins&family=Special+Elite&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <title>vision board</title>
 </head>
@@ -53,15 +56,22 @@
                 <button id="text" class="tools">add text</button>
                 <button id="shape" class="tools">shape</button>
                 <button id="bgcolor" class="tools">background color</button>
-                <input
-                    type="color"
-                    id="bgpicker"
-                    style="display:none;"
-                >
                 <button id="empty" class="tools">clear</button>
                 <button id="export" class="features">export canvas</button>
             </div>
+
+            <div id="bgwindow">
+                <button id="closebgwindow">✕</button>
+                <h3>background studio</h3>
+                <div class="textgroup">
+                    <label>background color</label>
+                    <input type="color" id="bgpicker">
+                    <input id="bghexinput" placeholder="#f7ead7">
+                </div>
+            </div>
+
             <div id="board"></div>
+
             <button id="generatepalette">generate palette</button>
             <div id="palettewindow">
                 <h3 id="palettetitle"></h3>
@@ -89,6 +99,16 @@
                         min="10"
                         max="120"
                         value="32">
+                </div>
+                <div class="textgroup">
+                    <label>font</label>
+                    <select id="fontfamily">
+                        <option class="fontvalue" value="'Yuyu'">yuyu (default)</option>
+                        <option class="fontvalue" value="'Caveat', cursive">caveat</option>
+                        <option class="fontvalue" value="'Playfair Display', serif">playfair display</option>
+                        <option class="fontvalue" value="'Poppins', sans-serif">poppins</option>
+                        <option class="fontvalue" value="'Special Elite', monospace">special elite</option>
+                    </select>
                 </div>
                 <div class="textbuttons">
                     <button id="bold"><b>B</b></button>

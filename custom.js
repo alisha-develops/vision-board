@@ -3,6 +3,9 @@ const play = document.getElementById('play');
 const music = document.getElementById('music');
 const musicwindow = document.getElementById('musicwindow');
 
+const textSettings = document.getElementById("textsettings");
+const textWindow = document.getElementById("textwindow");
+
 music.addEventListener("click", ()=> {
     musicwindow.classList.toggle("active");
 });
@@ -301,14 +304,36 @@ document.addEventListener("click", (e) => {
 const bgcolor = document.getElementById("bgcolor");
 const bgpicker = document.getElementById("bgpicker");
 const board = document.getElementById("board");
-
-bgcolor.addEventListener("click", () => {
-    bgpicker.click();
-});
+const bghexinput = document.getElementById("bghexinput");
+const bgWindow = document.getElementById("bgwindow");
 
 bgpicker.addEventListener("input", () => {
-    board.style.backgroundColor = bgpicker.value;
+    const color = bgpicker.value;
+    bghexinput.value = color;
+    board.style.backgroundColor = color;
 });
+
+bghexinput.addEventListener("input", () => {
+    const value = bghexinput.value.trim();
+    const isValidHex = /^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/.test(value);
+
+    if (isValidHex) {
+        bgpicker.value = value;
+        board.style.backgroundColor = value;
+    }
+});
+
+bgWindow.classList.remove("active");
+
+bgcolor.addEventListener("click", () => {
+    textWindow.classList.remove("active");
+    bgWindow.classList.toggle("active");
+});
+
+document.getElementById("closebgwindow").addEventListener("click", () => {
+    bgWindow.classList.remove("active");
+});
+
 
 function createBoardItem(el) {
     const board = document.getElementById("board");
@@ -401,9 +426,55 @@ hexInput.addEventListener("input", () => {
     }
 });
 
+const fontFamilySelect = document.getElementById("fontfamily");
 
-const textSettings = document.getElementById("textsettings");
-const textWindow = document.getElementById("textwindow");
+fontFamilySelect.addEventListener("change", () => {
+    if (activeTextItem === null) {
+        return;
+    }
+
+    activeTextItem.style.fontFamily = fontFamilySelect.value;
+});
+
+const bold = document.getElementById("bold");
+const italic = document.getElementById("italic");
+const fontSize = document.getElementById("fontsize");
+
+bold.addEventListener("click", () => {
+    if (activeTextItem === null) {
+        return;
+    }
+
+    bold.classList.toggle("active");
+
+    if (bold.classList.contains("active")) {
+        activeTextItem.style.fontWeight = "bold";
+    } else {
+        activeTextItem.style.fontWeight = "normal";
+    }
+})
+
+italic.addEventListener("click", () => {
+    if (activeTextItem === null) {
+        return;
+    }
+
+    italic.classList.toggle("active");
+
+    if (italic.classList.contains("active")) {
+        activeTextItem.style.fontStyle = "italic";
+    } else {
+        activeTextItem.style.fontStyle = "normal";
+    }
+});
+
+fontSize.addEventListener("input", () => {
+    if (activeTextItem === null) {
+        return;
+    }
+
+    activeTextItem.style.fontSize = fontSize.value + "px";
+});
 
 textSettings.style.display = "none";
 textWindow.classList.remove("active");
@@ -415,35 +486,51 @@ document.getElementById("closetextwindow").addEventListener("click", () => {
     textWindow.classList.remove("active");
 });
 
-const textWindowHeader = textWindow.querySelector("h3");
+function makeDraggable(windowElement, headerElement) {
+    let isDragging = false;
+    let dragOffsetX = 0;
+    let dragOffsetY = 0;
+    let pendingX = 0;
+    let pendingY = 0;
+    let rafScheduled = false;
 
-let isDraggingWindow = false;
-let dragOffsetX = 0;
-let dragOffsetY = 0;
+    headerElement.addEventListener("mousedown", (event) => {
+        isDragging = true;
+        event.preventDefault();
 
-textWindowHeader.addEventListener("mousedown", (event) => {
-    isDraggingWindow = true;
+        const rect = windowElement.getBoundingClientRect();
+        dragOffsetX = event.clientX - rect.left;
+        dragOffsetY = event.clientY - rect.top;
 
-    const rect = textWindow.getBoundingClientRect();
-    dragOffsetX = event.clientX - rect.left;
-    dragOffsetY = event.clientY - rect.top;
-});
+        document.body.style.userSelect = "none";
+    });
 
-document.addEventListener("mousemove", (event) => {
-    if (isDraggingWindow === false) {
-        return;
-    }
+    document.addEventListener("mousemove", (event) => {
+        if (isDragging === false) {
+            return;
+        }
 
-    let newLeft = event.clientX - dragOffsetX;
-    let newTop = event.clientY - dragOffsetY;
+        pendingX = event.clientX - dragOffsetX;
+        pendingY = event.clientY - dragOffsetY;
 
-    textWindow.style.left = newLeft + "px";
-    textWindow.style.top = newTop + "px";
-});
+        if (rafScheduled === false) {
+            rafScheduled = true;
+            requestAnimationFrame(() => {
+                windowElement.style.left = pendingX + "px";
+                windowElement.style.top = pendingY + "px";
+                rafScheduled = false;
+            });
+        }
+    });
 
-document.addEventListener("mouseup", () => {
-    isDraggingWindow = false;
-});
+    document.addEventListener("mouseup", () => {
+        isDragging = false;
+        document.body.style.userSelect = "";
+    });
+}
+
+makeDraggable(textWindow, textWindow.querySelector("h3"));
+makeDraggable(bgWindow, bgWindow.querySelector("h3"));
 
 function enableDragging(paper){
     let isDragging = false;
