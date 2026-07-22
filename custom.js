@@ -334,17 +334,39 @@ document.getElementById("text").addEventListener("click", () => {
     text.addEventListener("dblclick", () => {
         text.contentEditable = true;
         text.focus();
+
+        const range = document.createRange();
+        range.selectNodeContents(text);
+
+        const selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(range);
     });
 
     text.addEventListener("blur", () => {
         text.contentEditable = false;
     });
+    textSettings.style.display = "inline-block";
 
     const paper = createBoardItem(text);
 
     paper.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
 
 });
+
+const textSettings = document.getElementById("textsettings");
+const textWindow = document.getElementById("textwindow");
+
+textSettings.style.display = "none";
+textWindow.classList.remove("active");
+    textSettings.addEventListener("click", () => {
+    textWindow.classList.toggle("active");
+});
+
+document.getElementById("closetextwindow").addEventListener("click", () => {
+    textWindow.classList.remove("active");
+});
+
 
 function enableDragging(paper){
     let isDragging = false;

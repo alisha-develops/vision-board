@@ -250,6 +250,130 @@ header h1 {
     font-family: 'Yuyu';
 }
 
+#textsettings{
+    position:fixed;
+    bottom:20px;
+    left:20px;
+    display:none;
+    padding:8px 15px;
+    background:rgba(243,211,174,.97);
+    border:2px dashed #664b2c;
+    border-radius:10px;
+    color:#664b2c;
+    font-family:Yuyu;
+    cursor:pointer;
+    z-index:999;
+}
+
+#textsettings:hover{
+    background:#664b2c;
+    color:#f7ead7;
+}
+
+#textwindow {
+    position: fixed;
+    bottom: 60px;
+    right: 260px;
+    width: 250px;
+    background: rgba(243, 211, 174, 0.97);
+    border: 2px dashed #664b2c;
+    border-radius: 12px;
+    padding: 15px;
+    display: none;
+    z-index: 998;
+    font-family: "Yuyu";
+    color: #664b2c;
+}
+
+#textwindow.active {
+    display: block;
+}
+
+#textwindow h3 {
+    text-align: center;
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+    text-transform: lowercase;
+}
+
+.textgroup {
+    margin-bottom: 15px;
+}
+
+.textgroup label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 0.85rem;
+}
+
+#textcolor {
+    width: 100%;
+    height: 38px;
+    border: 1px dashed #664b2c;
+    border-radius: 8px;
+    background: transparent;
+    cursor: pointer;
+}
+
+#hexinput {
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 8px;
+    padding: 7px 10px;
+    border: 1px dashed #664b2c;
+    border-radius: 6px;
+    background: rgba(255,255,255,.35);
+    color: #664b2c;
+    font-family: "Yuyu";
+    outline: none;
+}
+
+#hexinput::placeholder {
+    color: rgba(102,75,44,.6);
+}
+
+#fontsize {
+    width: 100%;
+    cursor: pointer;
+    accent-color: #664b2c;
+}
+
+.textbuttons {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.textbuttons button {
+    flex: 1;
+    padding: 7px;
+    background: transparent;
+    border: 1px dashed #664b2c;
+    color: #664b2c;
+    font-family: "Yuyu";
+    border-radius: 6px;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.textbuttons button:hover,
+.textbuttons button.active {
+    background: #664b2c;
+    color: #f7ead7;
+}
+
+#closetextwindow{
+    position:absolute;
+    top:8px;
+    right:8px;
+    border:none;
+    background:none;
+    color:#664b2c;
+    font-size:18px;
+    cursor:pointer;
+    font-family:Yuyu;
+}
+
 .toolbar {
     width: fit-content;
     margin: 0 auto;

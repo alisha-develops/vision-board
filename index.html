@@ -70,7 +70,32 @@
                 <button id="regenerate">regenerate</button>
                 <a href="https://vision-board-mu.vercel.app/api/palette" target="_blank" id="apilink">brewed by my own api!</a>
             </div>
-        </div>
+            <button id="textsettings" style="display:none;">text settings</button>
+            <div id="textwindow">
+                <button id="closetextwindow">✕</button>
+                <h3>text studio</h3>
+                <div class="textgroup">
+                    <label>text color</label>
+                    <input type="color" id="textcolor">
+                    <input
+                        id="hexinput"
+                        placeholder="#664b2c">
+                </div>
+                <div class="textgroup">
+                    <label>font size</label>
+                    <input
+                        type="range"
+                        id="fontsize"
+                        min="10"
+                        max="120"
+                        value="32">
+                </div>
+                <div class="textbuttons">
+                    <button id="bold"><b>B</b></button>
+                    <button id="italic"><i>I</i></button>
+                </div>
+            </div>
+    </div>
         <!-- <img src="cards/Group 1140 (1).png" id="arrow1">
         <img src="cards/Group 1141.png" id="arrow2"> -->
     </main>
