@@ -432,3 +432,18 @@ footer {
     background: rgba(255, 255, 255, 0.08);
     font-weight: 600;font-size: 0.9em;
 }
+
+.textitem{
+    min-width:150px;
+    min-height:40px;
+    padding:8px;
+    font-family:Yuyu;
+    font-size:2rem;
+    color:#664b2c;
+    background:transparent;
+    outline:none;
+    border:none;
+    cursor:text;
+    white-space:pre-wrap;
+    word-break:break-word;
+}
