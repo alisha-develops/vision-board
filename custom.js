@@ -1170,17 +1170,6 @@ let shapeStartY = 0;
 let isDrawingShape = false;
 let canvasSnapshot = null;
 
-shapeButton.addEventListener("click", () => {
-    shapeOptions.classList.toggle("show");
-});
-
-document.addEventListener("click", (event) => {
-    const isClickInsideMenu = document.getElementById("shapemenu").contains(event.target);
-
-    if (isClickInsideMenu === false) {
-        shapeOptions.classList.remove("show");
-    }
-});
 
 const shapeSettings = {
     strokeColor: "#664b2c",
@@ -1347,3 +1336,52 @@ makeDraggable(shapeWindow, shapeWindow.querySelector("h3"));
 document.getElementById("new").addEventListener("click", () => {
     alert("coming soon - full board management is on the way! other tools work though!!");
 });
+
+shapeButton.addEventListener("click", (event) => {
+    event.stopPropagation();
+
+    if (shapeOptions.style.display === "block") {
+        shapeOptions.style.display = "none";
+    } else {
+        shapeOptions.style.display = "block";
+    }
+});
+
+document.addEventListener("click", () => {
+    shapeOptions.style.display = "none";
+});
+
+document.addEventListener("click", (event) => {
+    if (event.target.classList.contains("shapetool")) {
+        return;
+    }
+
+    if (event.target === shapeButton) {
+        return;
+    }
+
+    shapeOptions.style.display = "none";
+});
+
+function resetDrawingMode() {
+    currentTool = null;
+    currentShape = null;
+    drawCanvas.classList.remove("drawing-active");
+    drawWindow.classList.remove("active");
+    shapeWindow.classList.remove("active");
+
+    drawTools.forEach((button) => {
+        button.classList.remove("active");
+    });
+
+    shapeTools.forEach((button) => {
+        button.classList.remove("active");
+    });
+}
+
+document.getElementById("upload").addEventListener("click", resetDrawingMode);
+document.getElementById("text").addEventListener("click", resetDrawingMode);
+document.getElementById("bgcolor").addEventListener("click", resetDrawingMode);
+document.getElementById("empty").addEventListener("click", resetDrawingMode);
+document.getElementById("export").addEventListener("click", resetDrawingMode);
+document.getElementById("new").addEventListener("click", resetDrawingMode);
