@@ -33,13 +33,20 @@
         <div id="backdrop"></div>
         <div id="templateswindow">
             <button id="closetemplates">✕</button>
-            <p>templates coming soon!</p>
-            <div class="templates">
-                soon!
+            <p style="font-size:xx-large;">templates coming soon!(will ship it as an update :bleh:)</p>
+            <div class="templates" style="font-size:large;">
+                see custom for now!
             </div>
         </div>
         <div id="customwindow" style="width: 1200px; height: 600px;">
             <button id="closecustom">✕</button>
+            <div id="closeconfirm">
+                <p>are u sure? think again!</p>
+                <div class="confirmbuttons">
+                    <button id="confirmclose">yes</button>
+                    <button id="cancelclose">no</button>
+                </div>
+            </div>
             <div class="toolbar">
                 <button id="new" class="tools">new board</button>
                 <div id="drawmenu" class="dropdown">
@@ -55,7 +62,7 @@
                 <input type="file" id="photoupload" accept="image/*" style="display:none;">
                 <button id="text" class="tools">add text</button>
                 <button id="shape" class="tools">shape</button>
-                <button id="bgcolor" class="tools">background color</button>
+                <button id="bgcolor" class="tools">background styles</button>
                 <button id="empty" class="tools">clear</button>
                 <button id="export" class="features">export canvas</button>
             </div>
@@ -67,6 +74,27 @@
                     <label>background color</label>
                     <input type="color" id="bgpicker">
                     <input id="bghexinput" placeholder="#f7ead7">
+                </div>
+                <div class="textgroup">
+                    <label>show grid</label>
+                    <input type="checkbox" id="gridtoggle">
+                </div>
+
+                <div class="textgroup">
+                    <label>border color</label>
+                    <input type="color" id="borderpicker">
+                    <input id="borderhexinput" placeholder="#664b2c">
+                </div>
+
+                <div class="textgroup">
+                    <label>border style</label>
+                    <select id="borderstyle">
+                        <option value="dashed">dashed (default)</option>
+                        <option value="solid">solid</option>
+                        <option value="dotted">dotted</option>
+                        <option value="double">double</option>
+                        <option value="none">none</option>
+                    </select>
                 </div>
             </div>
 
@@ -110,12 +138,17 @@
                         <option class="fontvalue" value="'Special Elite', monospace">special elite</option>
                     </select>
                 </div>
+                <div class="textgroup">
+                    <label style="font-size: 1rem; text-decoration: dashed;">paste google font embed code</label>
+                    <input id="fontembedinput" placeholder="<link href=... rel=stylesheet>">
+                    <button id="fontembedapply">add font</button>
+                </div>
                 <div class="textbuttons">
                     <button id="bold"><b>B</b></button>
                     <button id="italic"><i>I</i></button>
                 </div>
             </div>
-    </div>
+        </div>
         <!-- <img src="cards/Group 1140 (1).png" id="arrow1">
         <img src="cards/Group 1141.png" id="arrow2"> -->
     </main>

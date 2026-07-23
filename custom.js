@@ -162,10 +162,24 @@ document.getElementById("card2").addEventListener("click", ()=> {
     document.getElementById("backdrop").classList.add("active");
     showWindowFooter();
 })
-document.getElementById("closecustom").addEventListener("click",()=> {
+
+const closeConfirm = document.getElementById("closeconfirm");
+const confirmCloseButton = document.getElementById("confirmclose");
+const cancelCloseButton = document.getElementById("cancelclose");
+
+document.getElementById("closecustom").addEventListener("click", () => {
+    closeConfirm.classList.add("active");
+});
+
+confirmCloseButton.addEventListener("click", () => {
+    closeConfirm.classList.remove("active");
     document.getElementById("customwindow").classList.remove("active");
     document.getElementById("backdrop").classList.remove("active");
-})
+});
+
+cancelCloseButton.addEventListener("click", () => {
+    closeConfirm.classList.remove("active");
+});
 
 const title = document.getElementById("title");
 title.innerHTML = "my vision board!".split("").map(char =>
@@ -361,6 +375,39 @@ function createBoardItem(el) {
     return paper;
 }
 
+const gridToggle = document.getElementById("gridtoggle");
+const borderPicker = document.getElementById("borderpicker");
+const borderHexInput = document.getElementById("borderhexinput");
+const borderStyleSelect = document.getElementById("borderstyle");
+
+gridToggle.addEventListener("change", () => {
+    if (gridToggle.checked === true) {
+        board.classList.add("show-grid");
+    } else {
+        board.classList.remove("show-grid");
+    }
+});
+
+borderPicker.addEventListener("input", () => {
+    const color = borderPicker.value;
+    borderHexInput.value = color;
+    board.style.setProperty("--board-border-color", color);
+});
+
+borderHexInput.addEventListener("input", () => {
+    const value = borderHexInput.value.trim();
+    const isValidHex = /^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/.test(value);
+
+    if (isValidHex) {
+        borderPicker.value = value;
+        board.style.setProperty("--board-border-color", value);
+    }
+});
+
+borderStyleSelect.addEventListener("change", () => {
+    board.style.setProperty("--board-border-style", borderStyleSelect.value);
+});
+
 document.getElementById("text").addEventListener("click", () => {
 
     const text = document.createElement("div");
@@ -484,6 +531,50 @@ textWindow.classList.remove("active");
 
 document.getElementById("closetextwindow").addEventListener("click", () => {
     textWindow.classList.remove("active");
+});
+
+const fontEmbedInput = document.getElementById("fontembedinput");
+const fontEmbedApply = document.getElementById("fontembedapply");
+
+fontEmbedApply.addEventListener("click", () => {
+    if (activeTextItem === null) {
+        alert("Select a text box first");
+        return;
+    }
+
+    const pastedCode = fontEmbedInput.value.trim();
+
+    if (pastedCode === "") {
+        return;
+    }
+
+    const urlMatch = pastedCode.match(/https:\/\/fonts\.googleapis\.com\/css2?\?[^\s"')]+/);
+
+    if (urlMatch === null) {
+        alert("couldn't find a valid google fonts link in that code");
+        return;
+    }
+
+    const fontUrl = urlMatch[0];
+
+    const familyMatch = fontUrl.match(/family=([^&:]+)/);
+
+    if (familyMatch === null) {
+        alert("couldn't figure out the font name from that link");
+        return;
+    }
+
+    const fontFamilyName = familyMatch[1].replace(/\+/g, " ");
+
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = fontUrl;
+    document.head.appendChild(link);
+
+    link.addEventListener("load", () => {
+        activeTextItem.style.fontFamily = "'" + fontFamilyName + "'";
+        fontEmbedInput.value = "";
+    });
 });
 
 function makeDraggable(windowElement, headerElement) {
