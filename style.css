@@ -962,6 +962,115 @@ header h1 {
     font-family: Yuyu;
 }
 
+#shapewindow {
+    position: fixed;
+    top: 200px;
+    left: 400px;
+    width: 250px;
+    background: rgba(243, 211, 174, 0.97);
+    border: 2px dashed #664b2c;
+    border-radius: 12px;
+    padding: 15px;
+    display: none;
+    z-index: 998;
+    font-family: "Yuyu";
+    color: #664b2c;
+}
+
+#shapewindow.active {
+    display: block;
+}
+
+#shapewindow h3 {
+    text-align: center;
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+    text-transform: lowercase;
+    cursor: move;
+    user-select: none;
+}
+
+.dropdowncontent {
+    display: none;
+}
+
+.dropdowncontent.show {
+    display: block;
+}
+
+#closeshapewindow {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    border: none;
+    background: none;
+    color: #664b2c;
+    font-size: 18px;
+    cursor: pointer;
+    font-family: Yuyu;
+}
+
+#shapestrokepicker,
+#shapefillpicker {
+    width: 100%;
+    height: 38px;
+    border: 1px dashed #664b2c;
+    border-radius: 8px;
+    background: transparent;
+    cursor: pointer;
+    padding: 0;
+}
+
+#shapestrokepicker::-webkit-color-swatch-wrapper,
+#shapefillpicker::-webkit-color-swatch-wrapper {
+    padding: 0;
+    border-radius: 8px;
+}
+
+#shapestrokepicker::-webkit-color-swatch,
+#shapefillpicker::-webkit-color-swatch {
+    border: none;
+    border-radius: 8px;
+}
+
+#shapestrokepicker::-moz-color-swatch,
+#shapefillpicker::-moz-color-swatch {
+    border: none;
+    border-radius: 8px;
+}
+
+#shapestrokehexinput,
+#shapefillhexinput {
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 8px;
+    padding: 7px 10px;
+    border: 1px dashed #664b2c;
+    border-radius: 6px;
+    background: rgba(255,255,255,.35);
+    color: #664b2c;
+    font-family: "Yuyu";
+    outline: none;
+}
+
+#shapestrokehexinput::placeholder,
+#shapefillhexinput::placeholder {
+    color: rgba(102,75,44,.6);
+}
+
+#shapefilltoggle {
+    width: 18px;
+    height: 18px;
+    accent-color: #664b2c;
+    cursor: pointer;
+}
+
+#shapestrokewidth {
+    width: 100%;
+    cursor: pointer;
+    accent-color: #664b2c;
+}
+
 footer {
     margin-top: auto;
     width: 100%;

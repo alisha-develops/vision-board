@@ -61,7 +61,15 @@
                 <button id="upload" class="tools">add photo</button>
                 <input type="file" id="photoupload" accept="image/*" style="display:none;">
                 <button id="text" class="tools">add text</button>
-                <button id="shape" class="tools">shape</button>
+                <div id="shapemenu" class="dropdown">
+                    <button id="shape" class="tools">shape ↓</button>
+                    <div id="shapeoptions" class="dropdowncontent">
+                        <button class="shapetool" data-shape="rectangle">rectangle</button>
+                        <button class="shapetool" data-shape="circle">circle</button>
+                        <button class="shapetool" data-shape="line">line</button>
+                        <button class="shapetool" data-shape="triangle">triangle</button>
+                    </div>
+                </div>
                 <button id="bgcolor" class="tools">background styles</button>
                 <button id="empty" class="tools">clear</button>
                 <button id="export" class="features">export canvas</button>
@@ -177,6 +185,28 @@
                         <option value="dashed">dashed</option>
                         <option value="dotted">dotted</option>
                     </select>
+                </div>
+            </div>
+            <div id="shapewindow">
+                <button id="closeshapewindow">✕</button>
+                <h3>shape studio</h3>
+                <div class="textgroup">
+                    <label>stroke color</label>
+                    <input type="color" id="shapestrokepicker">
+                    <input id="shapestrokehexinput" placeholder="#664b2c">
+                </div>
+                <div class="textgroup">
+                    <label>fill color</label>
+                    <input type="color" id="shapefillpicker">
+                    <input id="shapefillhexinput" placeholder="#f7ead7">
+                </div>
+                <div class="textgroup">
+                    <label>fill enabled</label>
+                    <input type="checkbox" id="shapefilltoggle">
+                </div>
+                <div class="textgroup">
+                    <label>stroke width</label>
+                    <input type="range" id="shapestrokewidth" min="1" max="20" value="2">
                 </div>
             </div>
         </div>

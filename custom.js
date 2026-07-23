@@ -937,6 +937,7 @@ let currentTool = null;
 let isDrawing = false;
 let lastX = 0;
 let lastY = 0;
+let totalDrawnDistance = 0;
 
 const toolSettings = {
     pencil: { 
@@ -996,6 +997,8 @@ function startDrawing(event) {
     }
 
     isDrawing = true;
+    totalDrawnDistance = 0;
+
     const position = getCanvasPosition(event);
     lastX = position.x;
     lastY = position.y;
@@ -1020,6 +1023,8 @@ function drawStroke(event) {
     const settings = toolSettings[currentTool];
     const position = getCanvasPosition(event);
 
+    const segmentLength = Math.hypot(position.x - lastX, position.y - lastY);
+
     drawCtx.globalCompositeOperation = settings.composite;
     drawCtx.globalAlpha = settings.opacity;
     drawCtx.strokeStyle = settings.color;
@@ -1027,11 +1032,14 @@ function drawStroke(event) {
     drawCtx.lineCap = "round";
     drawCtx.lineJoin = "round";
     drawCtx.setLineDash(dashPatterns[settings.dash === undefined ? "solid" : settings.dash]);
+    drawCtx.lineDashOffset = -totalDrawnDistance;
 
     drawCtx.beginPath();
     drawCtx.moveTo(lastX, lastY);
     drawCtx.lineTo(position.x, position.y);
     drawCtx.stroke();
+
+    totalDrawnDistance = totalDrawnDistance + segmentLength;
 
     lastX = position.x;
     lastY = position.y;
@@ -1149,3 +1157,54 @@ function exportBoard() {
 }
 document.getElementById("empty").addEventListener("click", clearBoard);
 document.getElementById("export").addEventListener("click", exportBoard);
+
+
+shapeButton.addEventListener("click", () => {
+    shapeOptions.classList.toggle("show");
+});
+
+document.addEventListener("click", (event) => {
+    const isClickInsideMenu = document.getElementById("shapemenu").contains(event.target);
+
+    if (isClickInsideMenu === false) {
+        shapeOptions.classList.remove("show");
+    }
+});
+
+const shapeButton = document.getElementById("shape");
+const shapeOptions = document.getElementById("shapeoptions");
+const shapeTools = document.querySelectorAll(".shapetool");
+const shapeWindow = document.getElementById("shapewindow");
+
+let currentShape = null;
+let shapeStartX = 0;
+let shapeStartY = 0;
+let isDrawingShape = false;
+let canvasSnapshot = null;
+
+const shapeSettings = {
+    strokeColor: "#664b2c",
+    fillColor: "#f7ead7",
+    fillEnabled: false,
+    strokeWidth: 2
+};
+
+shapeTools.forEach((toolButton) => {
+    toolButton.addEventListener("click", () => {
+        const selectedShape = toolButton.dataset.shape;
+
+        if (currentShape === selectedShape) {
+            currentShape = null;
+            drawCanvas.classList.remove("drawing-active");
+            shapeWindow.classList.remove("active");
+        } else {
+            currentTool = null;
+            currentShape = selectedShape;
+            drawCanvas.classList.add("drawing-active");
+            shapeWindow.classList.add("active");
+        }
+        shapeTools.forEach((button) => {
+            button.classList.toggle("active", button.dataset.shape === currentShape);
+        });
+    });
+});
