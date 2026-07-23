@@ -149,7 +149,6 @@ document.getElementById("card1").addEventListener("click", ()=> {
     desc2.style.opacity = "0";
     document.getElementById("templateswindow").classList.add("active");
     document.getElementById("backdrop").classList.add("active");
-    showWindowFooter();
 })
 document.getElementById("closetemplates").addEventListener("click",()=> {
     document.getElementById("templateswindow").classList.remove("active");
@@ -160,7 +159,6 @@ document.getElementById("card2").addEventListener("click", () => {
     desc1.style.opacity = "0";
     document.getElementById("customwindow").classList.add("active");
     document.getElementById("backdrop").classList.add("active");
-    showWindowFooter();
     setTimeout(resizeCanvas, 0);
 });
 
@@ -928,6 +926,7 @@ function deleteSelected() {
 const drawCanvas = document.getElementById("drawcanvas");
 const drawCtx = drawCanvas.getContext("2d");
 const drawTools = document.querySelectorAll(".drawtool");
+const drawWindow = document.getElementById("drawwindow");
 
 let currentTool = null;
 let isDrawing = false;
@@ -1041,9 +1040,12 @@ drawTools.forEach((toolButton) => {
         if (currentTool === selectedTool) {
             currentTool = null;
             drawCanvas.classList.remove("drawing-active");
+            drawWindow.classList.remove("active");
         } else {
             currentTool = selectedTool;
             drawCanvas.classList.add("drawing-active");
+            drawWindow.classList.add("active");
+            loadStrokeSettingsForCurrentTool();
         }
 
         drawTools.forEach((button) => {
@@ -1052,7 +1054,13 @@ drawTools.forEach((toolButton) => {
     });
 });
 
+makeDraggable(drawWindow, drawWindow.querySelector("h3"));
+
 resizeCanvas();
+
+document.getElementById("closedrawwindow").addEventListener("click", () => {
+    drawWindow.classList.remove("active");
+});
 
 function clearBoard() {
     const board = document.getElementById("board");

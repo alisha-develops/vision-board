@@ -870,6 +870,98 @@ header h1 {
     cursor: crosshair;
 }
 
+#drawwindow {
+    position: fixed;
+    top: 480px;
+    left: 50%;
+    margin-left: -125px;
+    width: 250px;
+    background: rgba(243, 211, 174, 0.97);
+    border: 2px dashed #664b2c;
+    border-radius: 12px;
+    padding: 15px;
+    display: none;
+    z-index: 998;
+    font-family: "Yuyu";
+    color: #664b2c;
+}
+
+#drawwindow.active {
+    display: block;
+}
+
+#drawwindow h3 {
+    text-align: center;
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+    text-transform: lowercase;
+    cursor: move;
+    user-select: none;
+}
+
+#strokepicker {
+    width: 100%;
+    height: 38px;
+    border: 1px dashed #664b2c;
+    border-radius: 8px;
+    background: transparent;
+    cursor: pointer;
+    padding: 0;
+}
+
+#strokepicker::-webkit-color-swatch-wrapper {
+    padding: 0;
+    border-radius: 8px;
+}
+
+#strokepicker::-webkit-color-swatch {
+    border: none;
+    border-radius: 8px;
+}
+
+#strokehexinput {
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 8px;
+    padding: 7px 10px;
+    border: 1px dashed #664b2c;
+    border-radius: 6px;
+    background: rgba(255,255,255,.35);
+    color: #664b2c;
+    font-family: "Yuyu";
+    outline: none;
+}
+
+#strokesize {
+    width: 100%;
+    cursor: pointer;
+    accent-color: #664b2c;
+}
+
+#strokestyle {
+    width: 100%;
+    padding: 7px 10px;
+    border: 1px dashed #664b2c;
+    border-radius: 6px;
+    background: rgba(255,255,255,.35);
+    color: #664b2c;
+    font-family: "Yuyu";
+    outline: none;
+    cursor: pointer;
+}
+
+#closedrawwindow {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    border: none;
+    background: none;
+    color: #664b2c;
+    font-size: 18px;
+    cursor: pointer;
+    font-family: Yuyu;
+}
+
 footer {
     margin-top: auto;
     width: 100%;
