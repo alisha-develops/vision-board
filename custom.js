@@ -928,6 +928,11 @@ const drawCtx = drawCanvas.getContext("2d");
 const drawTools = document.querySelectorAll(".drawtool");
 const drawWindow = document.getElementById("drawwindow");
 
+const strokePicker = document.getElementById("strokepicker");
+const strokeHexInput = document.getElementById("strokehexinput");
+const strokeSizeInput = document.getElementById("strokesize");
+const strokeStyleSelect = document.getElementById("strokestyle");
+
 let currentTool = null;
 let isDrawing = false;
 let lastX = 0;
@@ -996,6 +1001,13 @@ function startDrawing(event) {
     lastY = position.y;
 }
 
+const dashPatterns = {
+    solid: [],
+    dashed: [8, 6],
+    dotted: [2, 6]
+};
+
+
 function drawStroke(event) {
     if (isDrawing === false) {
         return;
@@ -1014,6 +1026,7 @@ function drawStroke(event) {
     drawCtx.lineWidth = settings.size;
     drawCtx.lineCap = "round";
     drawCtx.lineJoin = "round";
+    drawCtx.setLineDash(dashPatterns[settings.dash === undefined ? "solid" : settings.dash]);
 
     drawCtx.beginPath();
     drawCtx.moveTo(lastX, lastY);
@@ -1027,6 +1040,58 @@ function drawStroke(event) {
 function stopDrawing() {
     isDrawing = false;
 }
+
+function loadStrokeSettingsForCurrentTool() {
+    if (currentTool === null) {
+        return;
+    }
+
+    const settings = toolSettings[currentTool];
+    strokePicker.value = settings.color;
+    strokeHexInput.value = settings.color;
+    strokeSizeInput.value = settings.size;
+    strokeStyleSelect.value = settings.dash === undefined ? "solid" : settings.dash;
+}
+
+strokePicker.addEventListener("input", () => {
+    if (currentTool === null) {
+        return;
+    }
+
+    const color = strokePicker.value;
+    strokeHexInput.value = color;
+    toolSettings[currentTool].color = color;
+});
+
+strokeHexInput.addEventListener("input", () => {
+    if (currentTool === null) {
+        return;
+    }
+
+    const value = strokeHexInput.value.trim();
+    const isValidHex = /^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/.test(value);
+
+    if (isValidHex) {
+        strokePicker.value = value;
+        toolSettings[currentTool].color = value;
+    }
+});
+
+strokeSizeInput.addEventListener("input", () => {
+    if (currentTool === null) {
+        return;
+    }
+
+    toolSettings[currentTool].size = Number(strokeSizeInput.value);
+});
+
+strokeStyleSelect.addEventListener("change", () => {
+    if (currentTool === null) {
+        return;
+    }
+
+    toolSettings[currentTool].dash = strokeStyleSelect.value;
+});
 
 drawCanvas.addEventListener("mousedown", startDrawing);
 drawCanvas.addEventListener("mousemove", drawStroke);
