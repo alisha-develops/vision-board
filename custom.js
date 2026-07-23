@@ -78,8 +78,8 @@ async function loadSongs() {
     });
 }
 
-// playRandomMusic();
-// loadSongs();
+playRandomMusic();
+loadSongs();
 
 const genpalette = document.getElementById("generatepalette");
 
@@ -1159,6 +1159,17 @@ document.getElementById("empty").addEventListener("click", clearBoard);
 document.getElementById("export").addEventListener("click", exportBoard);
 
 
+const shapeButton = document.getElementById("shape");
+const shapeOptions = document.getElementById("shapeoptions");
+const shapeTools = document.querySelectorAll(".shapetool");
+const shapeWindow = document.getElementById("shapewindow");
+
+let currentShape = null;
+let shapeStartX = 0;
+let shapeStartY = 0;
+let isDrawingShape = false;
+let canvasSnapshot = null;
+
 shapeButton.addEventListener("click", () => {
     shapeOptions.classList.toggle("show");
 });
@@ -1170,17 +1181,6 @@ document.addEventListener("click", (event) => {
         shapeOptions.classList.remove("show");
     }
 });
-
-const shapeButton = document.getElementById("shape");
-const shapeOptions = document.getElementById("shapeoptions");
-const shapeTools = document.querySelectorAll(".shapetool");
-const shapeWindow = document.getElementById("shapewindow");
-
-let currentShape = null;
-let shapeStartX = 0;
-let shapeStartY = 0;
-let isDrawingShape = false;
-let canvasSnapshot = null;
 
 const shapeSettings = {
     strokeColor: "#664b2c",
@@ -1207,4 +1207,143 @@ shapeTools.forEach((toolButton) => {
             button.classList.toggle("active", button.dataset.shape === currentShape);
         });
     });
+});
+
+function startShape(event) {
+    if(currentShape === null) {
+        return;
+    }
+    isDrawingShape = true;
+    const position = getCanvasPosition(event);
+    shapeStartX = position.x;
+    shapeStartY = position.y;
+
+    canvasSnapshot = drawCtx.getImageData(0, 0, drawCanvas.width, drawCanvas.height);
+}
+
+function previewShape(event) {
+    if (isDrawingShape === false) {
+        return;
+    }
+
+    const position = getCanvasPosition(event);
+
+    drawCtx.putImageData(canvasSnapshot, 0, 0);
+    renderShape(shapeStartX, shapeStartY, position.x, position.y);
+}
+
+function endShape(event) {
+    if (isDrawingShape === false) {
+        return;
+    }
+
+    isDrawingShape = false;
+
+    const position = getCanvasPosition(event);
+    drawCtx.putImageData(canvasSnapshot, 0, 0);
+    renderShape(shapeStartX, shapeStartY, position.x, position.y);
+
+    canvasSnapshot = null;
+}
+
+function renderShape(startX, startY, endX, endY) {
+    drawCtx.globalCompositeOperation = "source-over";
+    drawCtx.globalAlpha = 1;
+    drawCtx.strokeStyle = shapeSettings.strokeColor;
+    drawCtx.fillStyle = shapeSettings.fillColor;
+    drawCtx.lineWidth = shapeSettings.strokeWidth;
+
+    const width = endX - startX;
+    const height = endY - startY;
+
+    drawCtx.beginPath();
+
+    if (currentShape === "rectangle") {
+        drawCtx.rect(startX, startY, width, height);
+    }
+
+    if (currentShape === "circle") {
+        const radiusX = Math.abs(width)/2;
+        const radiusY = Math.abs(height)/2;
+        const centerX = startX + width/2;
+        const centerY = startY + height/2;
+        drawCtx.ellipse(centerX, centerY, radiusX, radiusY, 0, 0, Math.PI * 2);
+    }
+
+    if (currentShape === "line") {
+        drawCtx.moveTo(startX, startY);
+        drawCtx.lineTo(endX, endY);
+    }
+
+    if (currentShape === "triangle") {
+        drawCtx.moveTo(startX + width / 2, startY);
+        drawCtx.lineTo(startX, endY);
+        drawCtx.lineTo(endX, endY);
+        drawCtx.closePath();
+    }
+
+    if (shapeSettings.fillEnabled === true && currentShape !== "line") {
+        drawCtx.fill();
+    }
+
+    drawCtx.stroke();
+}
+
+drawCanvas.addEventListener("mousedown", startShape);
+drawCanvas.addEventListener("mousemove", previewShape);
+drawCanvas.addEventListener("mouseup", endShape);
+
+const shapeStrokePicker = document.getElementById("shapestrokepicker");
+const shapeStrokeHexInput = document.getElementById("shapestrokehexinput");
+const shapeFillPicker = document.getElementById("shapefillpicker");
+const shapeFillHexInput = document.getElementById("shapefillhexinput");
+const shapeFillToggle = document.getElementById("shapefilltoggle");
+const shapeStrokeWidthInput = document.getElementById("shapestrokewidth");
+
+shapeStrokePicker.addEventListener("input", () => {
+    shapeSettings.strokeColor = shapeStrokePicker.value;
+    shapeStrokeHexInput.value = shapeStrokePicker.value;
+})
+
+shapeStrokeHexInput.addEventListener("input", () => {
+    const value = shapeStrokeHexInput.value.trim();
+    const isValidHex = /^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/.test(value);
+
+    if (isValidHex) {
+        shapeSettings.strokeColor = value;
+        shapeStrokePicker.value = value;
+    }
+})
+
+shapeFillPicker.addEventListener("input", () => {
+    shapeSettings.fillColor = shapeFillPicker.value;
+    shapeFillHexInput.value = shapeFillPicker.value;
+})
+
+shapeFillHexInput.addEventListener("input", () => {
+    const value = shapeFillHexInput.value.trim();
+    const isValidHex = /^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/.test(value);
+
+    if (isValidHex) {
+        shapeSettings.fillColor = value;
+        shapeFillPicker.value = value;
+    }
+});
+
+shapeFillToggle.addEventListener("change", ()=> {
+    shapeSettings.fillEnabled = shapeFillToggle.checked;
+});
+
+shapeStrokeWidthInput.addEventListener("input", () =>{
+    shapeSettings.strokeWidth = Number(shapeStrokeWidthInput.value);
+});
+
+document.getElementById("closeshapewindow").addEventListener("click", ()=> {
+    shapeWindow.classList.remove("active");
+});
+
+makeDraggable(shapeWindow, shapeWindow.querySelector("h3"));
+
+document.getElementById("new").addEventListener("click", () => {
+    alert("coming soon - full board management is on the way! other tools work though!!");
 });
