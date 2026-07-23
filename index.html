@@ -70,35 +70,45 @@
             <div id="bgwindow">
                 <button id="closebgwindow">✕</button>
                 <h3>background studio</h3>
-                <div class="textgroup">
-                    <label>background color</label>
-                    <input type="color" id="bgpicker">
-                    <input id="bghexinput" placeholder="#f7ead7">
+                <div class="bgpage active" data-page="1">
+                    <div class="textgroup">
+                        <label>background color</label>
+                        <input type="color" id="bgpicker">
+                        <input id="bghexinput" placeholder="#f7ead7">
+                    </div>
+                    <div class="textgroup">
+                        <label>show grid</label>
+                        <input type="checkbox" id="gridtoggle">
+                    </div>
                 </div>
-                <div class="textgroup">
-                    <label>show grid</label>
-                    <input type="checkbox" id="gridtoggle">
-                </div>
+                <div class="bgpage" data-page="2">
+                    <div class="textgroup">
+                        <label>border color</label>
+                        <input type="color" id="borderpicker">
+                        <input id="borderhexinput" placeholder="#664b2c">
+                    </div>
 
-                <div class="textgroup">
-                    <label>border color</label>
-                    <input type="color" id="borderpicker">
-                    <input id="borderhexinput" placeholder="#664b2c">
+                    <div class="textgroup">
+                        <label>border style</label>
+                        <select id="borderstyle">
+                            <option value="dashed">dashed (default)</option>
+                            <option value="solid">solid</option>
+                            <option value="dotted">dotted</option>
+                            <option value="double">double</option>
+                            <option value="none">none</option>
+                        </select>
+                    </div>
                 </div>
-
-                <div class="textgroup">
-                    <label>border style</label>
-                    <select id="borderstyle">
-                        <option value="dashed">dashed (default)</option>
-                        <option value="solid">solid</option>
-                        <option value="dotted">dotted</option>
-                        <option value="double">double</option>
-                        <option value="none">none</option>
-                    </select>
+                <div class="bgpagenav">
+                    <button id="bgprevpage">‹ back</button>
+                    <span id="bgpageindicator">1 / 2</span>
+                    <button id="bgnextpage">next ›</button>
                 </div>
             </div>
 
-            <div id="board"></div>
+            <div id="board">
+                <canvas id="drawcanvas"></canvas>
+            </div>
 
             <button id="generatepalette">generate palette</button>
             <div id="palettewindow">

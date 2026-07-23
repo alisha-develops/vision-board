@@ -807,6 +807,69 @@ header h1 {
     pointer-events:auto;
 }
 
+.bgpage {
+    display: none;
+}
+
+.bgpage.active {
+    display: block;
+}
+
+.bgpagenav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 15px;
+    padding-top: 12px;
+    border-top: 1px dashed rgba(102,75,44,.4);
+}
+
+.bgpagenav button {
+    padding: 6px 12px;
+    background: transparent;
+    border: 1px dashed #664b2c;
+    color: #664b2c;
+    font-family: "Yuyu";
+    border-radius: 6px;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.bgpagenav button:hover {
+    background: #664b2c;
+    color: #f7ead7;
+}
+
+.bgpagenav button:disabled {
+    opacity: .35;
+    cursor: default;
+    background: transparent;
+    color: #664b2c;
+}
+
+#bgpageindicator {
+    font-size: .8rem;
+}
+
+#bgwindow .textgroup label {
+    font-size: 1.1rem;
+}
+
+#drawcanvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 500;
+}
+
+#drawcanvas.drawing-active {
+    pointer-events: auto;
+    cursor: crosshair;
+}
+
 footer {
     margin-top: auto;
     width: 100%;

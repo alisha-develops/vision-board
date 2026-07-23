@@ -156,12 +156,13 @@ document.getElementById("closetemplates").addEventListener("click",()=> {
     document.getElementById("backdrop").classList.remove("active");
 })
 
-document.getElementById("card2").addEventListener("click", ()=> {
+document.getElementById("card2").addEventListener("click", () => {
     desc1.style.opacity = "0";
     document.getElementById("customwindow").classList.add("active");
     document.getElementById("backdrop").classList.add("active");
     showWindowFooter();
-})
+    setTimeout(resizeCanvas, 0);
+});
 
 const closeConfirm = document.getElementById("closeconfirm");
 const confirmCloseButton = document.getElementById("confirmclose");
@@ -347,6 +348,46 @@ bgcolor.addEventListener("click", () => {
 document.getElementById("closebgwindow").addEventListener("click", () => {
     bgWindow.classList.remove("active");
 });
+
+const bgPages = document.querySelectorAll(".bgpage");
+const bgPrevPage = document.getElementById("bgprevpage");
+const bgNextPage = document.getElementById("bgnextpage");
+const bgPageIndicator = document.getElementById("bgpageindicator");
+
+let currentBgPage = 1;
+const totalBgPages = bgPages.length
+
+function showBgPage(pageNumber) {
+    bgPages.forEach((page) => {
+        const isTargetPage = page.dataset.page === String(pageNumber);
+
+        if (isTargetPage === true) {
+            page.classList.add("active");
+        } else {
+            page.classList.remove("active");
+        }
+    });
+
+    bgPageIndicator.textContent = pageNumber + "/" + totalBgPages;
+    bgPrevPage.disabled = pageNumber === 1;
+    bgNextPage.disabled = pageNumber === totalBgPages;
+}
+
+bgPrevPage.addEventListener("click", () => {
+    if (currentBgPage > 1) {
+        currentBgPage = currentBgPage - 1;
+        showBgPage(currentBgPage);
+    }
+});
+
+bgNextPage.addEventListener("click", () => {
+    if (currentBgPage < totalBgPages) {
+        currentBgPage = currentBgPage + 1;
+        showBgPage(currentBgPage);
+    }
+});
+
+showBgPage(currentBgPage);
 
 
 function createBoardItem(el) {
@@ -883,6 +924,135 @@ function deleteSelected() {
     });
     hideControls();
 }
+
+const drawCanvas = document.getElementById("drawcanvas");
+const drawCtx = drawCanvas.getContext("2d");
+const drawTools = document.querySelectorAll(".drawtool");
+
+let currentTool = null;
+let isDrawing = false;
+let lastX = 0;
+let lastY = 0;
+
+const toolSettings = {
+    pencil: { 
+        size: 2, 
+        color: "#664b2c", 
+        opacity: 1, 
+        composite: "source-over" 
+    },
+    marker: { 
+        size: 8, 
+        color: "#664b2c", 
+        opacity: 1, 
+        composite: "source-over" },
+    highlighter: { 
+        size: 20, 
+        color: "#ffe066", 
+        opacity: 0.4, composite: 
+        "source-over" },
+    eraser: { 
+        size: 20, 
+        color: "#000000", 
+        opacity: 1, 
+        composite: "destination-out" 
+    }
+};
+
+function resizeCanvas() {
+    const rect = board.getBoundingClientRect();
+
+    let imageData = null;
+
+    if (drawCanvas.width > 0 && drawCanvas.height > 0) {
+        imageData = drawCtx.getImageData(0, 0, drawCanvas.width, drawCanvas.height);
+    }
+
+    drawCanvas.width = rect.width;
+    drawCanvas.height = rect.height;
+
+    if (imageData !== null) {
+        drawCtx.putImageData(imageData, 0, 0);
+    }
+}
+
+window.addEventListener("load", resizeCanvas);
+
+function getCanvasPosition(event) {
+    const rect = drawCanvas.getBoundingClientRect();
+    return {
+        x: event.clientX - rect.left,
+        y: event.clientY - rect.top
+    };
+}
+
+function startDrawing(event) {
+    if (currentTool === null) {
+        return;
+    }
+
+    isDrawing = true;
+    const position = getCanvasPosition(event);
+    lastX = position.x;
+    lastY = position.y;
+}
+
+function drawStroke(event) {
+    if (isDrawing === false) {
+        return;
+    }
+
+    if (currentTool === null) {
+        return;
+    }
+
+    const settings = toolSettings[currentTool];
+    const position = getCanvasPosition(event);
+
+    drawCtx.globalCompositeOperation = settings.composite;
+    drawCtx.globalAlpha = settings.opacity;
+    drawCtx.strokeStyle = settings.color;
+    drawCtx.lineWidth = settings.size;
+    drawCtx.lineCap = "round";
+    drawCtx.lineJoin = "round";
+
+    drawCtx.beginPath();
+    drawCtx.moveTo(lastX, lastY);
+    drawCtx.lineTo(position.x, position.y);
+    drawCtx.stroke();
+
+    lastX = position.x;
+    lastY = position.y;
+}
+
+function stopDrawing() {
+    isDrawing = false;
+}
+
+drawCanvas.addEventListener("mousedown", startDrawing);
+drawCanvas.addEventListener("mousemove", drawStroke);
+drawCanvas.addEventListener("mouseup", stopDrawing);
+drawCanvas.addEventListener("mouseleave", stopDrawing);
+
+drawTools.forEach((toolButton) => {
+    toolButton.addEventListener("click", () => {
+        const selectedTool = toolButton.dataset.tool;
+
+        if (currentTool === selectedTool) {
+            currentTool = null;
+            drawCanvas.classList.remove("drawing-active");
+        } else {
+            currentTool = selectedTool;
+            drawCanvas.classList.add("drawing-active");
+        }
+
+        drawTools.forEach((button) => {
+            button.classList.toggle("active", button.dataset.tool === currentTool);
+        });
+    });
+});
+
+resizeCanvas();
 
 function clearBoard() {
     const board = document.getElementById("board");
