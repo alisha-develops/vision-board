@@ -33,9 +33,24 @@
         <div id="backdrop"></div>
         <div id="templateswindow">
             <button id="closetemplates">✕</button>
-            <p style="font-size:xx-large;">templates coming soon!(will ship it as an update :bleh:)</p>
-            <div class="templates" style="font-size:large;">
-                see custom for now!
+            <p style="font-size:xx-large;">templates!</p>
+            <div class="templates">
+                <div class="template-card" onclick="openTemplate(1)">
+                    <h3>template 1</h3>
+                    <p>click to open</p>
+                </div>
+                <div class="template-card" onclick="openTemplate(2)">
+                    <h3>template 2</h3>
+                    <p>click to open</p>
+                </div>
+                <div class="template-card" onclick="openTemplate(3)">
+                    <h3>template 3</h3>
+                    <p>click to open</p>
+                </div>
+                <div class="template-card" onclick="openTemplate(4)">
+                    <h3>template 4</h3>
+                    <p>click to open</p>
+                </div>
             </div>
         </div>
         <div id="customwindow" style="width: 1200px; height: 600px;">
@@ -221,5 +236,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
     <script src="custom.js"></script>
+    <script src="template.js"></script>
 </body>
 </html>

@@ -78,8 +78,8 @@ async function loadSongs() {
     });
 }
 
-playRandomMusic();
-loadSongs();
+// playRandomMusic();
+// loadSongs();
 
 const genpalette = document.getElementById("generatepalette");
 
@@ -409,7 +409,6 @@ function createBoardItem(el) {
     enableResize(paper, el);
     enableRotation(paper);
     enableSelection(paper);
-    enableSmartGuides(paper);
 
     return paper;
 }
