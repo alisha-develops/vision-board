@@ -151,15 +151,11 @@ document.querySelectorAll(".templatetool").forEach((toolButton) => {
         }
 
         if (action === "palette") {
-            const palettewindow = document.getElementById("palettewindow");
-            palettewindow.classList.toggle("active");
-
-            if (palettewindow.classList.contains("active")) {
-                generatePalette();
-            }
+            generateTemplatePalette();
         }
     });
 });
+
 const tileColorPicker = document.getElementById("tilecolorpicker");
 const tileColorHex = document.getElementById("tilecolorhex");
 const tileBorderColorPicker = document.getElementById("tilebordercolorpicker");
@@ -263,3 +259,50 @@ tileFontEmbedApply.addEventListener("click", () => {
         tileFontEmbedInput.value = "";
     });
 });
+
+
+async function generateTemplatePalette() {
+    const button = document.getElementById("templatepalettebutton");
+    const colorsContainer = document.getElementById("templatepalettecolors");
+
+    button.textContent = "loading...";
+    colorsContainer.innerHTML = "";
+    colorsContainer.classList.add("active");
+
+    try {
+        const response = await fetch("https://vision-board-mu.vercel.app/api/palette");
+
+        if (response.ok === false) {
+            button.textContent = "couldn't load, try again";
+            return;
+        }
+
+        const data = await response.json();
+
+        data.colors.forEach((color) => {
+            const swatch = document.createElement("div");
+            swatch.classList.add("swatch");
+            swatch.style.background = color;
+            swatch.title = "Click to copy " + color;
+
+            swatch.addEventListener("click", async () => {
+                try {
+                    await navigator.clipboard.writeText(color);
+                    swatch.title = "copied!";
+                    setTimeout(() => {
+                        swatch.title = "Click to copy " + color;
+                    }, 1000);
+                } catch (err) {
+                    console.error("Failed to copy:", err);
+                }
+            });
+
+            colorsContainer.appendChild(swatch);
+        });
+
+        button.textContent = "regenerate";
+    } catch (err) {
+        button.textContent = "couldn't load, try again";
+        console.error("Failed to fetch palette:", err);
+    }
+}
