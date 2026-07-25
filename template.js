@@ -74,6 +74,9 @@ let activeLetterTile = null;
 let letterTileCount = 0;
 
 function createLetterTitle() {
+    const wrapper = document.createElement("div");
+    wrapper.classList.add("lettertilewrapper");
+
     const tile = document.createElement("div");
     tile.classList.add("lettertile");
     tile.contentEditable = true;
@@ -83,8 +86,8 @@ function createLetterTitle() {
     letterTileCount = letterTileCount + 1;
     const offsetStack = (letterTileCount % 6) * 15;
 
-    tile.style.top = (40 + offsetStack) + "px";
-    tile.style.left = (40 + offsetStack) + "px";
+    wrapper.style.top = (40 + offsetStack) + "px";
+    wrapper.style.left = (40 + offsetStack) + "px";
 
     tile.addEventListener("mousedown", () => {
         activeLetterTile = tile;
@@ -102,10 +105,12 @@ function createLetterTitle() {
         selection.addRange(range);
     });
 
-    templateBoard1.appendChild(tile);
-    enableLetterTileDragging(tile);
-    enableLetterTileRotation(tile);
-    enableLetterTileResize(tile);
+    wrapper.appendChild(tile);
+    templateBoard1.appendChild(wrapper);
+
+    enableLetterTileDragging(wrapper);
+    enableLetterTileRotation(wrapper);
+    enableLetterTileResize(wrapper);
 
     activeLetterTile = tile;
 }

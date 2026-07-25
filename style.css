@@ -1366,10 +1366,15 @@ footer {
     right: 220px;
 }
 
-.lettertile {
+.lettertilewrapper {
     position: absolute;
     width: 60px;
     height: 60px;
+}
+
+.lettertile {
+    width: 100%;
+    height: 100%;
     background: #e8c48a;
     background-image: linear-gradient(135deg, rgba(255,255,255,.25), rgba(0,0,0,.08));
     border: 2px solid #a9772f;
@@ -1385,7 +1390,6 @@ footer {
     cursor: move;
     user-select: none;
     text-transform: uppercase;
-    z-index: 20;
 }
 
 .lettertile:focus {

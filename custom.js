@@ -253,6 +253,26 @@ card2.addEventListener("mouseleave", () =>{
 });
 
 document.addEventListener("keydown", (e) => {
+    const activeElement = document.activeElement;
+
+    let isTyping = false;
+
+    if (activeElement.isContentEditable === true) {
+        isTyping = true;
+    }
+
+    if (activeElement.tagName === "INPUT") {
+        isTyping = true;
+    }
+
+    if (activeElement.tagName === "TEXTAREA") {
+        isTyping = true;
+    }
+
+    if (isTyping === true) {
+        return;
+    }
+
     if (e.key === "t") {
         document.getElementById("templateswindow").classList.add("active");
         document.getElementById("backdrop").classList.add("active");
