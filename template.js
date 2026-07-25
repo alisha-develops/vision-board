@@ -153,6 +153,9 @@ document.querySelectorAll(".templatetool").forEach((toolButton) => {
         if (action === "palette") {
             generateTemplatePalette();
         }
+        if (action === "stickertray") {
+            document.getElementById("stickertray").classList.toggle("active");
+        }
     });
 });
 
@@ -305,4 +308,32 @@ async function generateTemplatePalette() {
         button.textContent = "couldn't load, try again";
         console.error("Failed to fetch palette:", err);
     }
+}
+
+document.getElementById("closestickertray").addEventListener("click", () => {
+    document.getElementById("stickertray").classList.remove("active");
+})
+
+let stickerCount = 0;
+
+document.querySelectorAll(".stickeritem").forEach((stickerThumb) => {
+    stickerThumb.addEventListener("click", () => {
+        placeSticker(stickerThumb.src);
+    });
+});
+
+function placeSticker(imageSrc) {
+    const sticker = document.createElement("img");
+    sticker.src = imageSrc;
+    sticker.classList.add("placedsticker");
+
+    stickerCount = stickerCount + 1;
+    const offsetStack = (stickerCount % 6) * 15;
+
+    sticker.style.top = (60 + offsetStack) + "px";
+    sticker.style.left = (60 + offsetStack) + "px";
+
+    templateBoard1.appendChild(sticker);
+    enableStickerDragging(sticker);
+    enableStickerRotation(sticker);
 }

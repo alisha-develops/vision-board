@@ -36,9 +36,7 @@
             <button id="closetemplates">✕</button>
             <p style="font-size:xx-large;">templates!</p>
             <div class="templates">
-                <div class="template-card" onclick="openTemplate(1)">
-                    <h3>template 1</h3>
-                    <p>click to open</p>
+                <div class="template-card" onclick="openTemplate(1)" style="background-image: url(https://cdn.hackclub.com/019f9a7d-f9ef-7cf4-8046-63c76f3c154a/Screenshot%202026-07-25%20231422.png);">
                 </div>
                 <div class="template-card" onclick="openTemplate(2)">
                     <h3>template 2</h3>
@@ -119,6 +117,21 @@
                 </div>
                 <button class="templatetool" data-action="borderstyle">border style ↓</button>
                 <button class="templatetool" data-action="export">export</button>
+            </div>
+            <button class="templatetool" data-action="stickertray">stickers ↑</button>
+
+            <div id="stickertray">
+                <button id="closestickertray">✕</button>
+                <div class="stickergrid" id="stickergrid">
+                    <img class="stickeritem" src="stickers/bouquet.png" data-sticker="bouquet">
+                    <img class="stickeritem" src="stickers/bouquet2.png" data-sticker="bouquet2">
+                    <img class="stickeritem" src="stickers/butterfly.png" data-sticker="butterfly">
+                    <img class="stickeritem" src="stickers/flower1.png" data-sticker="flower1">
+                    <img class="stickeritem" src="stickers/flower2.png" data-sticker="flower2">
+                    <img class="stickeritem" src="stickers/flower3.png" data-sticker="flower3">
+                    <img class="stickeritem" src="stickers/flower5.png" data-sticker="flower5">
+                    <img class="stickeritem" src="stickers/flower6.png" data-sticker="flower6">
+                </div>
             </div>
         </div>
         <div id="customwindow" style="width: 1200px; height: 600px;">
