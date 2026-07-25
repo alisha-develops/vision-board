@@ -39,3 +39,16 @@ templateBoxes.forEach((box) => {
         reader.readAsDataURL(file);
     });
 });
+
+function openTemplate(templateNumber) {
+    document.getElementById("templateswindow").classList.remove("active");
+    document.getElementById("templatewindow" + templateNumber).classList.add("active");
+}
+
+document.querySelectorAll(".closetemplatewindow").forEach((closeButton) => {
+    closeButton.addEventListener("click", () => {
+        const targetNumber = closeButton.dataset.target;
+        document.getElementById("templatewindow" + targetNumber).classList.remove("active");
+        document.getElementById("templateswindow").classList.add("active");
+    });
+});
