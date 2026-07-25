@@ -52,3 +52,12 @@ document.querySelectorAll(".closetemplatewindow").forEach((closeButton) => {
         document.getElementById("templateswindow").classList.add("active");
     });
 });
+
+document.querySelectorAll(".templatetoolbartoggle").forEach((toggleButton) => {
+    toggleButton.addEventListener("click", () => {
+        const targetNumber = toggleButton.dataset.target;
+        const targetWindow = document.getElementById("templatewindow" + targetNumber);
+
+        targetWindow.classList.toggle("templatewindow-panel-open");
+    });
+});

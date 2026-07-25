@@ -56,30 +56,36 @@
         <div id="templatewindow1" class="template-window">
             <button class="closetemplatewindow" data-target="1">✕</button>
             <h3>template 1</h3>
-            <div class="templatetoolbar">
+
+            <button class="templatetoolbartoggle" data-target="1">🛠</button>
+
+            <div class="templatecontent">
+                <div class="templateboard" id="templateboard1">
+                    <div class="templateboxgrid">
+                        <div class="templatebox" id="templatebox1">
+                            <span class="templateboxhint">click to add photo</span>
+                            <input type="file" class="templateboxupload" accept="image/*" style="display:none;">
+                        </div>
+                        <div class="templatebox" id="templatebox2">
+                            <span class="templateboxhint">click to add photo</span>
+                            <input type="file" class="templateboxupload" accept="image/*" style="display:none;">
+                        </div>
+                        <div class="templatebox" id="templatebox3">
+                            <span class="templateboxhint">click to add photo</span>
+                            <input type="file" class="templateboxupload" accept="image/*" style="display:none;">
+                        </div>
+                        <div class="templatebox" id="templatebox4">
+                            <span class="templateboxhint">click to add photo</span>
+                            <input type="file" class="templateboxupload" accept="image/*" style="display:none;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="templatetoolbarpanel" id="templatetoolbarpanel1">
                 <button class="templatetool" data-action="addtext">add text</button>
                 <button class="templatetool" data-action="borderstyle">border style ↓</button>
                 <button class="templatetool" data-action="export">export</button>
-            </div>
-            <div class="templateboard" id="templateboard1">
-                <div class="templateboxgrid">
-                    <div class= "templatebox" id="templatebox1">
-                        <span class="templateboxhint">click to add photo</span>
-                        <input type="file" class="templateboxupload" accept="image/*" style="display:none;">
-                    </div>
-                    <div class="templatebox" id="templatebox2">
-                        <span class="templateboxhint">click to add photo</span>
-                        <input type="file" class="templateboxupload" accept="image/*" style="display:none;">
-                    </div>
-                    <div class="templatebox" id="templatebox3">
-                        <span class="templateboxhint">click to add photo</span>
-                        <input type="file" class="templateboxupload" accept="image/*" style="display:none;">
-                    </div>
-                    <div class="templatebox" id="templatebox4">
-                        <span class="templateboxhint">click to add photo</span>
-                        <input type="file" class="templateboxupload" accept="image/*" style="display:none;">
-                    </div>
-                </div>
             </div>
         </div>
         <div id="customwindow" style="width: 1200px; height: 600px;">
