@@ -104,6 +104,8 @@ function createLetterTitle() {
 
     templateBoard1.appendChild(tile);
     enableLetterTileDragging(tile);
+    enableLetterTileRotation(tile);
+    enableLetterTileResize(tile);
 
     activeLetterTile = tile;
 }
@@ -443,3 +445,164 @@ function enableStickerRotation(sticker) {
 
     sticker.appendChild(handle);
 }
+
+function enableLetterTileRotation(tile) {
+    tile.style.position = "absolute";
+
+    const handle = document.createElement("div");
+    handle.classList.add("rotatehandle");
+    handle.style.cssText = `
+        width: 18px;
+        height: 18px;
+        position: absolute;
+        bottom: -22px;
+        left: 50%;
+        transform: translateX(-50%);
+        cursor: grab;
+        font-size: 14px;
+        text-align: center;
+        color: #0e336b;
+        user-select: none;
+        display: none;
+    `;
+    handle.textContent = "↺";
+
+    let hideTimeout = null;
+
+    function showHandle() {
+        clearTimeout(hideTimeout);
+        handle.style.display = "block";
+    }
+
+    function scheduleHide() {
+        hideTimeout = setTimeout(() => {
+            handle.style.display = "none";
+        }, 150);
+    }
+
+    tile.addEventListener("mouseenter", showHandle);
+    tile.addEventListener("mouseleave", scheduleHide);
+    handle.addEventListener("mouseenter", showHandle);
+    handle.addEventListener("mouseleave", scheduleHide);
+
+    let angle = 0;
+
+    handle.addEventListener("mousedown", (event) => {
+        event.stopPropagation();
+        event.preventDefault();
+
+        const rect = tile.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+
+        const onMove = (moveEvent) => {
+            const dx = moveEvent.clientX - centerX;
+            const dy = moveEvent.clientY - centerY;
+            angle = Math.atan2(dy, dx) * (180 / Math.PI) + 90;
+            tile.style.transform = `rotate(${angle}deg)`;
+        };
+
+        const onUp = () => {
+            document.removeEventListener("mousemove", onMove);
+            document.removeEventListener("mouseup", onUp);
+        };
+
+        document.addEventListener("mousemove", onMove);
+        document.addEventListener("mouseup", onUp);
+    });
+
+    tile.appendChild(handle);
+}
+
+function enableLetterTileResize(tile) {
+    const handle = document.createElement("div");
+    handle.classList.add("tileresizehandle");
+    handle.style.cssText = `
+        width: 10px;
+        height: 10px;
+        background: #4A90D9;
+        border: 2px solid white;
+        border-radius: 50%;
+        box-sizing: border-box;
+        position: absolute;
+        bottom: -5px;
+        right: -5px;
+        cursor: se-resize;
+        z-index: 25;
+        display: none;
+    `;
+
+    let hideTimeout = null;
+
+    function showHandle() {
+        clearTimeout(hideTimeout);
+        handle.style.display = "block";
+    }
+
+    function scheduleHide() {
+        hideTimeout = setTimeout(() => {
+            handle.style.display = "none";
+        }, 150);
+    }
+
+    tile.addEventListener("mouseenter", showHandle);
+    tile.addEventListener("mouseleave", scheduleHide);
+    handle.addEventListener("mouseenter", showHandle);
+    handle.addEventListener("mouseleave", scheduleHide);
+
+    handle.addEventListener("mousedown", (event) => {
+        event.stopPropagation();
+        event.preventDefault();
+
+        const startX = event.clientX;
+        const startY = event.clientY;
+        const startWidth = tile.offsetWidth;
+        const startHeight = tile.offsetHeight;
+
+        const onMove = (moveEvent) => {
+            const dx = moveEvent.clientX - startX;
+            const dy = moveEvent.clientY - startY;
+
+            const newSize = Math.max(30, startWidth + Math.max(dx, dy));
+
+            tile.style.width = newSize + "px";
+            tile.style.height = newSize + "px";
+        };
+
+        const onUp = () => {
+            document.removeEventListener("mousemove", onMove);
+            document.removeEventListener("mouseup", onUp);
+        };
+
+        document.addEventListener("mousemove", onMove);
+        document.addEventListener("mouseup", onUp);
+    });
+
+    tile.appendChild(handle);
+}
+
+const tileTextColorPicker = document.getElementById("tiletextcolorpicker");
+const tileTextColorHex = document.getElementById("tiletextcolorhex");
+
+tileTextColorPicker.addEventListener("input", () => {
+    if (activeLetterTile ===null ) {
+        return;
+    }
+    const color = tileTextColorPicker.value;
+    tileTextColorHex.value = color;
+    activeLetterTile.style.color = color;
+});
+
+tileTextColorHex.addEventListener("input", () => {
+    if (activeLetterTile === null) {
+        return;
+    }
+
+    const value = tileTextColorHex.value.trim();
+    const isValidHex = /^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/.test(value);
+
+    if (isValidHex) {
+        tileTextColorPicker.value = value;
+        activeLetterTile.style.color = value;
+    }
+})

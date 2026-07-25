@@ -1372,7 +1372,7 @@ footer {
     height: 60px;
     background: #e8c48a;
     background-image: linear-gradient(135deg, rgba(255,255,255,.25), rgba(0,0,0,.08));
-    border: 2ox solid #a9772f;
+    border: 2px solid #a9772f;
     border-radius: 6px;
     box-shadow: 0 3px 6px rgba(0,0,0,.3);
     display: flex;
