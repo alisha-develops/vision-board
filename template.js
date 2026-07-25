@@ -49,16 +49,22 @@ document.querySelectorAll(".templatetoolbartoggle").forEach((toggleButton) => {
         const content = targetWindow.querySelector(".templatecontent");
         const isOpen = targetWindow.classList.contains("templatewindow-panel-open");
 
-        if(isOpen === false) {
-            const currentWidth = targetWindow.getBoundingClientRect().width;
-
-            content.style.width = (currentWidth - 60) + "px";
-            targetWindow.style.width = (currentWidth + 220) + "px";
-            targetWindow.classList.add("templatewindow-panel-open");
-        } else {
-            targetWindow.style.width = "";
-            content.style.width = "";
-            targetWindow.classList.remove("templatewindow-panel-open");
+        if (targetWindow.dataset.baseWidth === undefined) {
+            targetWindow.dataset.baseWidth = targetWindow.getBoundingClientRect().width;
         }
+
+        const baseWidth = Number(targetWindow.dataset.baseWidth);
+
+        requestAnimationFrame(() => {
+            if (isOpen === false) {
+                targetWindow.style.width = (baseWidth + 220) + "px";
+                content.style.width = (baseWidth - 60) + "px";
+                targetWindow.classList.add("templatewindow-panel-open");
+            } else {
+                targetWindow.style.width = baseWidth + "px";
+                content.style.width = (baseWidth - 60) + "px";
+                targetWindow.classList.remove("templatewindow-panel-open");
+            }
+        });
     });
 });
