@@ -1,14 +1,3 @@
-function openTemplate(templateNumber) {
-    document.getElementById("templatewindow" + templateNumber).classList.add("active");
-}
-
-document.querySelectorAll(".closetemplatewindow").forEach((closeButton) => {
-    closeButton.addEventListener("click", () => {
-        const targetNumber = closeButton.dataset.target;
-        document.getElementById("templatewindow" + targetNumber).classList.remove("active");
-    });
-});
-
 const templateBoxes = document.querySelectorAll(".templatebox");
 
 templateBoxes.forEach((box) => {
@@ -57,7 +46,19 @@ document.querySelectorAll(".templatetoolbartoggle").forEach((toggleButton) => {
     toggleButton.addEventListener("click", () => {
         const targetNumber = toggleButton.dataset.target;
         const targetWindow = document.getElementById("templatewindow" + targetNumber);
+        const content = targetWindow.querySelector(".templatecontent");
+        const isOpen = targetWindow.classList.contains("templatewindow-panel-open");
 
-        targetWindow.classList.toggle("templatewindow-panel-open");
+        if(isOpen === false) {
+            const currentWidth = targetWindow.getBoundingClientRect().width;
+
+            content.style.width = (currentWidth - 60) + "px";
+            targetWindow.style.width = (currentWidth + 220) + "px";
+            targetWindow.classList.add("templatewindow-panel-open");
+        } else {
+            targetWindow.style.width = "";
+            content.style.width = "";
+            targetWindow.classList.remove("templatewindow-panel-open");
+        }
     });
 });
