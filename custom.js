@@ -257,15 +257,7 @@ document.addEventListener("keydown", (e) => {
         document.getElementById("templateswindow").classList.add("active");
         document.getElementById("backdrop").classList.add("active");
     }
-    if (e.key === "T") {
-        document.getElementById("templateswindow").classList.add("active");
-        document.getElementById("backdrop").classList.add("active");
-    }
     if (e.key === "c") {
-        document.getElementById("customwindow").classList.add("active");
-        document.getElementById("backdrop").classList.add("active");
-    }
-    if (e.key === "C") {
         document.getElementById("customwindow").classList.add("active");
         document.getElementById("backdrop").classList.add("active");
     }

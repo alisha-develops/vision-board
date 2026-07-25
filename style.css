@@ -649,10 +649,20 @@ header h1 {
     display: block;
 }
 
-#closetemplates, #closecustom, .closetemplatewindow {
+#closetemplates, #closecustom {
     position: absolute;
     top: 10px;
     right: 15px;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.closetemplatewindow {
+    position: absolute;
+    top: 10px;
+    left: 15px;
     background: none;
     border: none;
     font-size: 1.5rem;
@@ -1185,7 +1195,6 @@ footer {
     background-image: url("https://transparenttextures.com/patterns/45-degree-fabric-dark.png");
     border: 3px dashed rgb(109, 54, 29);
     padding: 30px;
-    transition: width 0.3s ease;
     overflow: hidden;
     transition: width 0.3s ease;
 }
@@ -1197,15 +1206,13 @@ footer {
 }
 
 .templateboxhint {
-    height: 200px;
-    width: 200px;
-    cursor:cell;
+    cursor: cell;
+    padding: 10px;
+    text-align: center;
 }
 
 .templatebox {
     border: 2px dashed rgb(73, 56, 7);
-    height: 200px;
-    width: 200px;
     position: absolute;
     cursor: pointer;
     display: flex;
@@ -1226,27 +1233,51 @@ footer {
 }
 
 #templatebox1 {
-    top: 120px;
+    top: 70px;
     left: 40px;
+    width: 260px;
+    height: 320px;
     transform: rotate(-4deg);
 }
 
 #templatebox2 {
     top: 60px;
-    left: 320px;
+    left: 330px;
+    width: 200px;
+    height: 200px;
     transform: rotate(3deg);
 }
 
 #templatebox3 {
-    top: 210px;
-    left: 550px;
+    top: 300px;
+    left: 350px;
+    width: 160px;
+    height: 160px;
     transform: rotate(2deg);
 }
 
 #templatebox4 {
-    top: 230px;
-    left: 800px;
+    top: 130px;
+    left: 570px;
+    width: 280px;
+    height: 360px;
     transform: rotate(-3deg);
+}
+
+#templatebox5 {
+    top: 20px;
+    left: 660px;
+    width: 300px;
+    height: 150px;
+    transform: rotate(2deg);
+}
+
+#templatebox6 {
+    top: 300px;
+    left: 60px;
+    width: 320px;
+    height: 140px;
+    transform: rotate(-2deg);
 }
 
 .templatetoolbar {
@@ -1328,4 +1359,30 @@ footer {
 
 .templatewindow-panel-open .templatetoolbartoggle {
     right: 220px;
+}
+
+.lettertile {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    background: #e8c48a;
+    background-image: linear-gradient(135deg, rgba(255,255,255,.25), rgba(0,0,0,.08));
+    border: 2ox solid #a9772f;
+    border-radius: 6px;
+    box-shadow: 0 3px 6px rgba(0,0,0,.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Yuyu";
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #4a2f10;
+    cursor: move;
+    user-select: none;
+    text-transform: uppercase;
+    z-index: 20;
+}
+
+.lettertile:focus {
+    outline: 2px dashed #664b2c;
 }
