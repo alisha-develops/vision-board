@@ -1193,7 +1193,47 @@ footer {
 .templatebox {
     border: 2px dashed rgb(73, 56, 7);
     height: 200px;
-    gap: 60px;
+    width: 200px;
+    position: absolute;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255,255,255,.35);
+    border-radius: 12px;
+    overflow: visible;
+    transition: transform .2s;
 }
 
+.templatebox img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,.25);
+}
+
+#templatebox1 {
+    top: 120px;
+    left: 40px;
+    transform: rotate(-4deg);
+}
+
+#templatebox2 {
+    top: 60px;
+    left: 320px;
+    transform: rotate(3deg);
+}
+
+#templatebox3 {
+    top: 210px;
+    left: 550px;
+    transform: rotate(2deg);
+}
+
+#templatebox4 {
+    top: 250px;
+    left: 800px;
+    transform: rotate(-3deg);
+}
 
