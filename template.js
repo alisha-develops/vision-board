@@ -70,6 +70,7 @@ document.querySelectorAll(".templatetoolbartoggle").forEach((toggleButton) => {
 });
 
 const templateBoard1 = document.getElementById("templateboard1");
+let activeLetterTile = null;
 let letterTileCount = 0;
 
 function createLetterTitle() {
@@ -85,6 +86,10 @@ function createLetterTitle() {
     tile.style.top = (40 + offsetStack) + "px";
     tile.style.left = (40 + offsetStack) + "px";
 
+    tile.addEventListener("mousedown", () => {
+        activeLetterTile = tile;
+    });
+
     tile.addEventListener("input", () => {
         const onlyFirstChar = tile.textContent.trim().slice(0, 1);
         tile.textContent = onlyFirstChar;
@@ -96,8 +101,11 @@ function createLetterTitle() {
         selection.removeAllRanges();
         selection.addRange(range);
     });
+
     templateBoard1.appendChild(tile);
     enableLetterTileDragging(tile);
+
+    activeLetterTile = tile;
 }
 
 function enableLetterTileDragging(tile) {
@@ -137,5 +145,121 @@ document.querySelectorAll(".templatetool").forEach((toolButton) => {
         if (action === "addletter") {
             createLetterTitle();
         }
+
+        if (action === "lettersettings") {
+            document.getElementById("letterstylepanel").classList.toggle("active");
+        }
+
+        if (action === "palette") {
+            const palettewindow = document.getElementById("palettewindow");
+            palettewindow.classList.toggle("active");
+
+            if (palettewindow.classList.contains("active")) {
+                generatePalette();
+            }
+        }
+    });
+});
+const tileColorPicker = document.getElementById("tilecolorpicker");
+const tileColorHex = document.getElementById("tilecolorhex");
+const tileBorderColorPicker = document.getElementById("tilebordercolorpicker");
+const tileBorderColorHex = document.getElementById("tilebordercolorhex");
+const tileFontSelect = document.getElementById("tilefontselect");
+
+tileColorPicker.addEventListener("input", () => {
+    if (activeLetterTile === null) {
+        return;
+    }
+
+    const color = tileColorPicker.value;
+    tileColorHex.value = color;
+    activeLetterTile.style.background = color;
+});
+
+tileColorHex.addEventListener("input", () => {
+    if (activeLetterTile === null) {
+        return;
+    }
+
+    const value = tileColorHex.value.trim();
+    const isValidHex = /^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/.test(value);
+
+    if (isValidHex) {
+        tileColorPicker.value = value;
+        activeLetterTile.style.background = value;
+    }
+});
+
+tileBorderColorPicker.addEventListener("input", () => {
+    if (activeLetterTile === null) {
+        return;
+    }
+
+    const color = tileBorderColorPicker.value;
+    tileBorderColorHex.value = color;
+    activeLetterTile.style.borderColor = color;
+});
+
+tileBorderColorHex.addEventListener("input", () => {
+    if (activeLetterTile === null) {
+        return;
+    }
+
+    const value = tileBorderColorHex.value.trim();
+    const isValidHex = /^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/.test(value);
+
+    if (isValidHex) {
+        tileBorderColorPicker.value = value;
+        activeLetterTile.style.borderColor = value;
+    }
+});
+
+tileFontSelect.addEventListener("change", () => {
+    if (activeLetterTile === null) {
+        return;
+    }
+    activeLetterTile.style.fontFamily = tileFontSelect.value;
+})
+
+const tileFontEmbedInput = document.getElementById("tilefontembedinput");
+const tileFontEmbedApply = document.getElementById("tilefontembedapply");
+
+tileFontEmbedApply.addEventListener("click", () => {
+    if (activeLetterTile === null) {
+        alert("Select a letter tile first");
+        return;
+    }
+
+    const pastedCode = tileFontEmbedInput.value.trim();
+
+    if (pastedCode === "") {
+        return;
+    }
+
+    const urlMatch = pastedCode.match(/https:\/\/fonts\.googleapis\.com\/css2?\?[^\s"')]+/);
+
+    if (urlMatch === null) {
+        alert("couldn't find a valid google fonts link in that code");
+        return;
+    }
+
+    const fontUrl = urlMatch[0];
+    const familyMatch = fontUrl.match(/family=([^&:]+)/);
+
+    if (familyMatch === null) {
+        alert("couldn't figure out the font name from that link");
+        return;
+    }
+
+    const fontFamilyName = familyMatch[1].replace(/\+/g, " ");
+
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = fontUrl;
+    document.head.appendChild(link);
+
+    link.addEventListener("load", () => {
+        activeLetterTile.style.fontFamily = "'" + fontFamilyName + "'";
+        tileFontEmbedInput.value = "";
     });
 });

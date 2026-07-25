@@ -6,6 +6,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Caveat&family=Playfair+Display&family=Poppins&family=Special+Elite&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Bungee&family=Archivo+Black&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <title>vision board</title>
 </head>
@@ -91,7 +92,30 @@
 
             <div class="templatetoolbarpanel" id="templatetoolbarpanel1">
                 <button class="templatetool" data-action="addtext">add text</button>
+                <button class="templatetool" data-action="palette">palette</button>
                 <button class="templatetool" data-action="addletter">+ add letter</button>
+                <button class="templatetool" data-action="lettersettings">letter style ↓</button>
+                <div id="letterstylepanel" class="lettersettingsbox">
+                    <label>tile color</label>
+                    <input type="color" id="tilecolorpicker">
+                    <input id="tilecolorhex" placeholder="#e8c48a">
+
+                    <label>border color</label>
+                    <input type="color" id="tilebordercolorpicker">
+                    <input id="tilebordercolorhex" placeholder="#a9772f">
+
+                    <label>font</label>
+                    <select id="tilefontselect">
+                        <option value="'Yuyu'">yuyu (default)</option>
+                        <option value="'Anton', sans-serif">anton (thick)</option>
+                        <option value="'Bungee', cursive">bungee (thick)</option>
+                        <option value="'Archivo Black', sans-serif">archivo black (thick)</option>
+                    </select>
+
+                    <label>paste google font embed code</label>
+                    <input id="tilefontembedinput" placeholder="<link href=... rel=stylesheet>">
+                    <button id="tilefontembedapply">add font</button>
+                </div>
                 <button class="templatetool" data-action="borderstyle">border style ↓</button>
                 <button class="templatetool" data-action="export">export</button>
             </div>
