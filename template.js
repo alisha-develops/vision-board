@@ -323,17 +323,123 @@ document.querySelectorAll(".stickeritem").forEach((stickerThumb) => {
 });
 
 function placeSticker(imageSrc) {
+    const wrapper = document.createElement("div");
+    wrapper.classList.add("placedstickerwrapper");
+
     const sticker = document.createElement("img");
     sticker.src = imageSrc;
     sticker.classList.add("placedsticker");
 
+    wrapper.appendChild(sticker);
+
     stickerCount = stickerCount + 1;
     const offsetStack = (stickerCount % 6) * 15;
 
-    sticker.style.top = (60 + offsetStack) + "px";
-    sticker.style.left = (60 + offsetStack) + "px";
+    wrapper.style.top = (60 + offsetStack) + "px";
+    wrapper.style.left = (60 + offsetStack) + "px";
 
-    templateBoard1.appendChild(sticker);
-    enableStickerDragging(sticker);
-    enableStickerRotation(sticker);
+    templateBoard1.appendChild(wrapper);
+    enableStickerDragging(wrapper);
+    enableStickerRotation(wrapper);
+}
+
+function enableStickerDragging(sticker){
+    let isDragging = false;
+    let offsetX = 0;
+    let offsetY = 0;
+
+    sticker.addEventListener("mousedown", (event) => {
+        if(event.target.classList.contains("rotatehandle")){
+            return;
+        }
+
+        isDragging = true;
+        offsetX = event.clientX - sticker.offsetLeft;
+        offsetY = event.clientY - sticker.offsetTop;
+    });
+    document.addEventListener("mousemove", (event) => {
+        if (isDragging === false) {
+            return;
+        }
+
+        let left = event.clientX - offsetX;
+        let top = event.clientY - offsetY;
+
+        left = Math.max(0, Math.min(left, templateBoard1.clientWidth - sticker.offsetWidth));
+        top = Math.max(0, Math.min(top, templateBoard1.clientHeight - sticker.offsetHeight));
+
+        sticker.style.left = left + "px";
+        sticker.style.top = top + "px";
+    });
+    document.addEventListener("mouseup", () => {
+        isDragging = false;
+    });
+}
+
+function enableStickerRotation(sticker) {
+    sticker.style.position = "relative";
+
+    const handle = document.createElement("div");
+    handle.classList.add("rotatehandle");
+    handle.style.cssText = `
+        width: 20px;
+        height: 20px;
+        position: absolute;
+        bottom: -25px;
+        left: 50%;
+        transform: translateX(-50%);
+        cursor: grab;
+        font-size: 16px;
+        text-align: center;
+        color: #0e336b;
+        user-select: none;
+        display: none;
+    `;
+    handle.textContent = "↺";
+
+    let hideTimeout = null;
+
+    function showHandle() {
+        clearTimeout(hideTimeout);
+        handle.style.display = "block";
+    }
+
+    function scheduleHide() {
+        hideTimeout = setTimeout(() => {
+            handle.style.display = "none";
+        }, 150);
+    }
+
+    sticker.addEventListener("mouseenter", showHandle);
+    sticker.addEventListener("mouseleave", scheduleHide);
+    handle.addEventListener("mouseenter", showHandle);
+    handle.addEventListener("mouseleave", scheduleHide);
+
+    let angle = 0;
+
+    handle.addEventListener("mousedown", (event) => {
+        event.stopPropagation();
+        event.preventDefault();
+
+        const rect = sticker.getBoundingClientRect();
+        const centerX = rect.left + rect.width/2;
+        const centerY = rect.top + rect.height/2;
+
+        const onMove = (moveEvent) => {
+            const dx = moveEvent.clientX - centerX;
+            const dy = moveEvent.clientY - centerY;
+            angle = Math.atan2(dy, dx) * (180 / Math.PI) + 90;
+            sticker.style.transform = `rotate(${angle}deg)`;
+        };
+
+        const onUp = () => {
+            document.removeEventListener("mousemove", onMove);
+            document.removeEventListener("mouseup", onUp);
+        };
+
+        document.addEventListener("mousemove", onMove);
+        document.addEventListener("mouseup", onUp);
+    });
+
+    sticker.appendChild(handle);
 }
