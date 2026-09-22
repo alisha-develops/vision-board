@@ -73,15 +73,18 @@ const templateBoard1 = document.getElementById("templateboard1");
 let activeLetterTile = null;
 let letterTileCount = 0;
 
-function createLetterTitle() {
+function createTile(mode) {
     const wrapper = document.createElement("div");
     wrapper.classList.add("lettertilewrapper");
 
     const tile = document.createElement("div");
     tile.classList.add("lettertile");
+    if (mode === "text") {
+        tile.classList.add("lettertile-text");
+    }
     tile.contentEditable = true;
     tile.spellcheck = false;
-    tile.textContent = "A";
+    tile.textContent = mode === "letter" ? "A" : "your text here";
 
     letterTileCount = letterTileCount + 1;
     const offsetStack = (letterTileCount % 6) * 15;
@@ -93,17 +96,23 @@ function createLetterTitle() {
         activeLetterTile = tile;
     });
 
-    tile.addEventListener("input", () => {
-        const onlyFirstChar = tile.textContent.trim().slice(0, 1);
-        tile.textContent = onlyFirstChar;
+    if (mode === "letter") {
+        tile.addEventListener("input", () => {
+            const onlyFirstChar = tile.textContent.trim().slice(0, 1);
+            tile.textContent = onlyFirstChar;
 
-        const range = document.createRange();
-        const selection = window.getSelection();
-        range.selectNodeContents(tile);
-        range.collapse(false);
-        selection.removeAllRanges();
-        selection.addRange(range);
-    });
+            const range = document.createRange();
+            const selection = window.getSelection();
+            range.selectNodeContents(tile);
+            range.collapse(false);
+            selection.removeAllRanges();
+            selection.addRange(range);
+        });
+    }
+
+    if (mode === "text") {
+        wrapper.classList.add("lettertilewrapper-text");
+    }
 
     wrapper.appendChild(tile);
     templateBoard1.appendChild(wrapper);
@@ -111,8 +120,20 @@ function createLetterTitle() {
     enableLetterTileDragging(wrapper);
     enableLetterTileRotation(wrapper);
     enableLetterTileResize(wrapper);
+    enableDeleteHandle(wrapper);
 
     activeLetterTile = tile;
+
+    return tile;
+}
+
+function createLetterTitle() {
+    createTile("letter");
+}
+
+function createTextBlock() {
+    const tile = createTile("text");
+    tile.focus();
 }
 
 function enableLetterTileDragging(tile) {
@@ -162,6 +183,10 @@ document.querySelectorAll(".templatetool").forEach((toolButton) => {
         }
         if (action === "stickertray") {
             document.getElementById("stickertray").classList.toggle("active");
+        }
+
+        if (action === "addtext") {
+            createTextBlock();
         }
     });
 });
@@ -348,6 +373,7 @@ function placeSticker(imageSrc) {
     templateBoard1.appendChild(wrapper);
     enableStickerDragging(wrapper);
     enableStickerRotation(wrapper);
+    enableDeleteHandle(wrapper);
 }
 
 function enableStickerDragging(sticker){
@@ -384,7 +410,7 @@ function enableStickerDragging(sticker){
 }
 
 function enableStickerRotation(sticker) {
-    sticker.style.position = "relative";
+    sticker.style.position = "absolute";
 
     const handle = document.createElement("div");
     handle.classList.add("rotatehandle");
@@ -586,6 +612,59 @@ function enableLetterTileResize(tile) {
     tile.appendChild(handle);
 }
 
+function enableDeleteHandle(wrapper) {
+    const handle = document.createElement("div");
+    handle.classList.add("deletehandle");
+    handle.style.cssText = `
+        width: 18px;
+        height: 18px;
+        position: absolute;
+        top: -22px;
+        left: 50%;
+        transform: translateX(-50%);
+        cursor: pointer;
+        font-size: 14px;
+        line-height: 18px;
+        text-align: center;
+        color: #b00020;
+        user-select: none;
+        display: none;
+        z-index: 30;
+    `;
+    handle.textContent = "✕";
+
+    let hideTimeout = null;
+
+    function showHandle() {
+        clearTimeout(hideTimeout);
+        handle.style.display = "block";
+    }
+
+    function scheduleHide() {
+        hideTimeout = setTimeout(() => {
+            handle.style.display = "none";
+        }, 150);
+    }
+
+    wrapper.addEventListener("mouseenter", showHandle);
+    wrapper.addEventListener("mouseleave", scheduleHide);
+    handle.addEventListener("mouseenter", showHandle);
+    handle.addEventListener("mouseleave", scheduleHide);
+
+    handle.addEventListener("mousedown", (event) => {
+        event.stopPropagation();
+        event.preventDefault();
+    });
+
+    handle.addEventListener("click", (event) => {
+        event.stopPropagation();
+        wrapper.remove();
+    });
+
+    wrapper.appendChild(handle);
+}
+
+
 const tileTextColorPicker = document.getElementById("tiletextcolorpicker");
 const tileTextColorHex = document.getElementById("tiletextcolorhex");
 
@@ -611,3 +690,4 @@ tileTextColorHex.addEventListener("input", () => {
         activeLetterTile.style.color = value;
     }
 })
+

@@ -1210,7 +1210,7 @@ footer {
 }
 
 .templateboxhint {
-    cursor: cell;
+    cursor: pointer;
     padding: 10px;
     text-align: center;
 }
@@ -1364,6 +1364,34 @@ footer {
 
 .templatewindow-panel-open .templatetoolbartoggle {
     right: 220px;
+}
+
+.lettertile.lettertile-text {
+    width: max-content;
+    max-width: 280px;
+    height: auto;
+    background: transparent;
+    background-image: none;
+    border: none;
+    box-shadow: none;
+    justify-content: flex-start;
+    text-align: left;
+    text-transform: none;
+    white-space: pre-wrap;   /* was nowrap */
+    word-break: break-word;
+    padding: 4px 8px;
+    cursor: text;
+    user-select: text;
+}
+
+.lettertile.lettertile-text:hover {
+    outline: 1px dashed #a9772f;
+    outline-offset: 2px;
+}
+
+.lettertile.lettertile-text:focus {
+    outline: 2px dashed #664b2c;
+    outline-offset: 2px;
 }
 
 .lettertilewrapper {
